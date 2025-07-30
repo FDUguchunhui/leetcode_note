@@ -1,0 +1,898 @@
+Front,Back
+"Valid Palindrome II (680, Easy): Given a string s, determine if it can become a palindrome after deleting at most one character. A palindrome reads the same forward and backward. Examples: Input: s = 'aba' Output: true. Input: s = 'abca' Output: true (remove 'c'). Input: s = 'abc' Output: false.","Brute Force: Generate all possible strings by removing each character and check if any is a palindrome. Time Complexity: O(n²). Optimized: Use two pointers from start and end; on mismatch, check if skipping either character results in a palindrome. Time Complexity: O(n). Key Points: Utilize two-pointer technique; on mismatch, verify both possible substrings; helper function to check palindrome efficiently."
+"1249. Minimum Remove to Make Valid Parentheses (Medium): Given a string s of '(' , ')' and lowercase English characters, remove the minimum number of parentheses so that the resulting string is valid. Return any valid string. A valid parentheses string is defined as:
+- It is the empty string, contains only lowercase characters, or
+- It can be written as AB (A concatenated with B), where A and B are valid strings, or
+- It can be written as (A), where A is a valid string.
+
+**Example 1:**
+Input: s = 'lee(t(c)o)de)'
+Output: 'lee(t(c)o)de'
+Explanation: 'lee(t(co)de)' , 'lee(t(c)ode)' would also be accepted.
+
+**Example 2:**
+Input: s = 'a)b(c)d'
+Output: 'ab(c)d'
+
+**Example 3:**
+Input: s = '))(('
+Output: ''
+Explanation: An empty string is also valid.","**Brute Force Solution:**
+1. Generate all possible subsequences of the input string.
+2. For each subsequence, check if it's a valid parentheses string.
+3. Keep track of the longest valid subsequence found.
+4. Return the longest valid subsequence.
+
+**Time Complexity:** O(2^n * n), where n is the length of the input string. Generating all subsequences takes O(2^n) time, and checking the validity of each subsequence takes O(n) time.
+
+**Optimized Solution:**
+1. **First Pass (Left to Right):**
+   - Initialize a balance counter.
+   - Iterate through the string:
+     - If the character is '(', increment the balance.
+     - If the character is ')':
+       - If balance is greater than 0, decrement the balance.
+       - If balance is 0, mark this ')' for removal.
+2. **Second Pass (Right to Left):**
+   - Initialize a balance counter.
+   - Iterate through the string:
+     - If the character is ')', increment the balance.
+     - If the character is '(':
+       - If balance is greater than 0, decrement the balance.
+       - If balance is 0, mark this '(' for removal.
+3. Construct the result string by excluding the marked characters.
+
+**Time Complexity:** O(n), where n is the length of the input string. We iterate through the string twice.
+
+**Key Points to Remember:**
+- The two-pass approach ensures that all unmatched parentheses are identified and removed.
+- The first pass removes excess ')', and the second pass removes excess '('.
+- This method guarantees the minimum number of removals to achieve a valid parentheses string.
+- The approach is efficient with a linear time complexity, making it suitable for large input strings."
+"215. Kth Largest Element in an Array (Medium): Given an integer array `nums` and an integer `k`, return the `k`th largest element in the array. Note that it is the `k`th largest element in the sorted order, not the `k`th distinct element. Example 1: Input: nums = [3,2,1,5,6,4], k = 2 Output: 5 Example 2: Input: nums = [3,2,3,1,2,4,5,5,6], k = 4 Output: 4","Brute Force: Sort the array in descending order and return the element at index `k-1`. Time Complexity: O(n log n). Optimized Solution: Use the Quickselect algorithm, which partitions the array around a pivot and recursively selects the partition containing the `k`th largest element. Time Complexity: Average O(n), Worst-case O(n²). Key Points: Quickselect is efficient for selection problems, but its worst-case time complexity can be quadratic. Alternatively, a Min Heap of size `k` can be maintained, offering O(n log k) time complexity. ([designgurus.io](https://www.designgurus.io/answers/detail/215-kth-largest-element-in-an-array-shdn120?utm_source=openai))"
+"Merge Intervals (56, Medium): Given an array of intervals where each interval is represented as [start, end], merge all overlapping intervals and return an array of the non-overlapping intervals that cover all the intervals in the input. Sample Input: [[1,3],[2,6],[8,10],[15,18]]. Sample Output: [[1,6],[8,10],[15,18]].","Brute Force Solution: 1. Sort the intervals by their start times. 2. For each interval, compare it with all subsequent intervals to check for overlaps. 3. Merge overlapping intervals and add non-overlapping intervals to the result. Time Complexity: O(n²) due to nested comparisons. Optimized Solution: 1. Sort the intervals by their start times. 2. Initialize an empty list to store merged intervals. 3. Iterate through the sorted intervals: a. If the list is empty or the current interval does not overlap with the last interval in the list, append it. b. If there is an overlap, merge the current interval with the last interval in the list by updating the end time to the maximum end time of both intervals. Time Complexity: O(n log n) due to sorting, followed by O(n) for merging, resulting in O(n log n) overall. Key Points: - Sorting the intervals simplifies the merging process. - Efficiently handles overlapping intervals by updating the end time of the last interval in the result list. - Ensures all intervals are processed in a single pass after sorting."
+"528. Random Pick with Weight (Medium): Implement a function pickIndex() that randomly selects an index from a given array w, where the probability of selecting index i is proportional to w[i]. For example, given w = [1, 3], the probability of picking index 0 is 1/4 (25%), and index 1 is 3/4 (75%). Sample Test Cases: Input: w = [1, 3], pickIndex() → Output: 1 (with 75% probability) or 0 (with 25% probability).","Brute Force Solution: Construct an array where each index i appears w[i] times, then randomly select an index from this array. Time Complexity: O(n * max(w[i])). Optimized Solution: 1. Compute a prefix sum array of w. 2. Generate a random number between 1 and the total sum of w. 3. Use binary search to find the smallest index where the prefix sum is greater than or equal to the random number. Time Complexity: O(n) for initialization, O(log n) for each pickIndex() call. Key Points: - Using a prefix sum array allows efficient mapping of random numbers to indices. - Binary search enables quick lookup of the appropriate index, improving performance over the brute force approach."
+"Binary Tree Vertical Order Traversal (314, Medium): Given the root of a binary tree, return the vertical order traversal of its nodes' values. If two nodes are in the same row and column, the order should be from left to right. Example: Input: [3,9,20,null,null,15,7]. Output: [[9],[3,15],[20],[7]].","Brute Force: Perform a depth-first search (DFS) to traverse all nodes, recording their horizontal distances and depths. Store nodes in a map with keys as horizontal distances and values as lists of (depth, value) pairs. After traversal, sort the map keys and sort each list by depth and value. Time Complexity: O(n log n) due to sorting operations. Optimized: Use breadth-first search (BFS) with a queue to traverse nodes level by level, maintaining a map to store nodes' values by their horizontal distances. This ensures nodes are processed in the correct top-to-bottom, left-to-right order without additional sorting. Time Complexity: O(n). Key Points: Utilize BFS to maintain the correct processing order; use a map to group nodes by horizontal distance; avoid sorting by processing nodes in the desired order during traversal."
+"339. Nested List Weight Sum (Medium): Given a nested list of integers, return the sum of all integers in the list weighted by their depth. Each element is either an integer or a list whose elements may also be integers or other lists. Sample Test Cases: Input: [[1,1],2,[1,1]] Output: 10 Explanation: Four 1's at depth 2, one 2 at depth 1. Input: [1,[4,[6]]] Output: 27 Explanation: One 1 at depth 1, one 4 at depth 2, and one 6 at depth 3; 1 + 4*2 + 6*3 = 27.","Brute Force Solution: Traverse the entire nested list, for each integer encountered, multiply it by its depth and add to the sum. Time Complexity: O(n), where n is the total number of integers in the nested list. Optimized Solution: Use Depth-First Search (DFS) to traverse the nested list recursively, keeping track of the current depth. For each integer, multiply it by its depth and add to the sum. Time Complexity: O(n), where n is the total number of integers in the nested list. Key Points: - DFS naturally handles nested structures. - Maintain a depth parameter to track the current depth. - Multiply each integer by its depth before adding to the sum."
+"Valid Word Abbreviation (408, Easy): Determine if a given abbreviation is a valid representation of a word. Input: word = 'internationalization', abbr = 'i12iz4n'. Output: true. Input: word = 'apple', abbr = 'a2e'. Output: false.","Brute Force: Compare each character of 'word' and 'abbr' sequentially, handling digits in 'abbr' by converting them to numbers and skipping corresponding characters in 'word'. Time Complexity: O(n). Optimized: Utilize two pointers to traverse 'word' and 'abbr', processing digits in 'abbr' to determine the number of characters to skip in 'word', and ensuring no leading zeros in numbers. Time Complexity: O(n). Key Points: 1. Use two pointers to traverse both strings. 2. Convert digit sequences in 'abbr' to numbers to determine skips in 'word'. 3. Ensure numbers in 'abbr' do not have leading zeros. 4. Verify both pointers reach the end of their respective strings simultaneously."
+"1570. Dot Product of Two Sparse Vectors (Medium): Given two sparse vectors, compute their dot product efficiently. A sparse vector is a vector that has most of its elements as zero. Implement a class `SparseVector` with methods: `SparseVector(nums)` to initialize the object with the vector `nums`, and `dotProduct(vec)` to compute the dot product between the instance of `SparseVector` and `vec`. Example: Input: nums1 = [1,0,0,2,3], nums2 = [0,3,0,4,0]. Output: 8. Explanation: v1 = SparseVector(nums1), v2 = SparseVector(nums2). v1.dotProduct(v2) = 1*0 + 0*3 + 0*0 + 2*4 + 3*0 = 8.","Brute Force: Iterate over all elements, multiply corresponding elements, and sum the results. Time Complexity: O(n). Optimized Solution: Store non-zero elements and their indices in a dictionary. Iterate over the non-zero elements of the smaller dictionary, multiply with corresponding elements in the other dictionary if they exist, and sum the results. Time Complexity: O(k), where k is the number of non-zero elements. Key Points: Utilize the sparsity by storing only non-zero elements; iterate over the smaller set of non-zero elements to optimize performance."
+"Basic Calculator II (227, Medium): Evaluate a string expression containing non-negative integers and operators '+', '-', '*', and '/'. Division should truncate toward zero. Input: '3+2*2'. Output: 7.","Brute Force: Parse the string, convert to Reverse Polish Notation (RPN), then evaluate RPN. Time Complexity: O(n). Optimized: Use a stack to handle operator precedence in a single pass. Time Complexity: O(n). Key Points: Handle spaces, multi-digit numbers, and operator precedence correctly; use integer division that truncates toward zero."
+"Top K Frequent Elements (347, Medium): Given an integer array nums and an integer k, return the k most frequent elements. You may return the answer in any order. Example: Input: nums = [1,1,1,2,2,3], k = 2. Output: [1,2].","Brute Force: 1. Count the frequency of each element using a hash map. 2. Sort the elements based on their frequency. 3. Return the top k elements. Time Complexity: O(n log n) due to sorting. Optimized Solution: 1. Count the frequency of each element using a hash map. 2. Use a min-heap to keep track of the top k elements. 3. Iterate through the frequency map, adding elements to the heap. If the heap exceeds size k, remove the smallest element. 4. Extract elements from the heap to get the result. Time Complexity: O(n log k) due to heap operations. Key Points: - Using a min-heap allows efficient tracking of the top k elements. - This approach is more efficient than sorting all elements, especially when k is much smaller than n."
+"50. Pow(x, n) (Medium): Implement a function that calculates x raised to the power n (x^n). Input: x = 2.00000, n = 10. Output: 1024.00000. Input: x = 2.10000, n = 3. Output: 9.26100. Input: x = 2.00000, n = -2. Output: 0.25000.","Brute Force: Multiply x by itself n times. Time Complexity: O(n). Optimized: Use binary exponentiation (fast power algorithm) by recursively dividing the exponent n by 2 and squaring the base x. If n is negative, compute the reciprocal of x and use -n as the exponent. Time Complexity: O(log n). Key Points: - Handle negative exponents by computing the reciprocal of x. - Use divide-and-conquer to reduce the number of multiplications. - Efficiently compute large powers by leveraging properties of exponents. [Source: ([algo.monster](https://algo.monster/liteproblems/50?utm_source=openai))]"
+"Merge Sorted Array (88, Easy): Merge two sorted arrays nums1 and nums2 into a single sorted array in-place within nums1. nums1 has a length of m + n, where the first m elements are the initial sorted elements, and the last n elements are set to 0 and should be ignored. nums2 has a length of n. Input: nums1 = [1,2,3,0,0,0], m = 3; nums2 = [2,5,6], n = 3. Output: [1,2,2,3,5,6].","Brute Force: Copy elements from nums1 and nums2 into a new array, sort it, and copy back to nums1. Time Complexity: O((m + n) log(m + n)). Optimized: Use two pointers starting from the end of nums1 and nums2, compare elements, and place the larger one at the end of nums1. Time Complexity: O(m + n). Key Points: Utilize the extra space at the end of nums1 to merge in-place from the back to the front, avoiding overwriting elements that haven't been compared yet."
+"543. Diameter of Binary Tree (Easy): Given the root of a binary tree, return the length of the diameter of the tree. The diameter is the length of the longest path between any two nodes, which may or may not pass through the root. The length of a path is measured by the number of edges between nodes. Sample Test Cases: Input: root = [1,2,3,4,5] Output: 3 Explanation: The longest path is [4,2,1,3] or [5,2,1,3], each with 3 edges. Input: root = [1,2] Output: 1 Explanation: The longest path is [2,1] with 1 edge.","Brute Force Solution: For each node, calculate the depth of its left and right subtrees, then compute the diameter passing through that node as the sum of these depths. Repeat this for all nodes to find the maximum diameter. Time Complexity: O(n²), where n is the number of nodes, due to repeated depth calculations. Optimized Solution: Utilize a depth-first search (DFS) to compute the depth of each subtree while simultaneously updating the maximum diameter found. This approach ensures each node is visited only once. Time Complexity: O(n), as each node is processed once. Key Points: - The diameter at any node is the sum of the depths of its left and right subtrees. - A single DFS traversal can compute both the depth and update the maximum diameter efficiently. - This method avoids redundant calculations, improving performance over the brute force approach."
+"71. Simplify Path (medium): Given an absolute Unix-style file path, simplify it to its canonical form by resolving '.' (current directory), '..' (parent directory), and redundant slashes. Input: '/home//foo/'. Output: '/home/foo'.","Brute Force: Iteratively replace '//' with '/', '/./' with '/', and handle '/../' by removing the preceding directory. Time Complexity: O(n²). Optimized: Split the path by '/', use a stack to process components: ignore '' and '.', pop stack for '..', push valid directory names. Time Complexity: O(n). Key Points: Use a stack to manage directory levels; handle '..' by popping the stack; ignore '.' and empty components; reconstruct the path from the stack."
+"Best Time to Buy and Sell Stock (121, Easy): Given an array 'prices' where prices[i] is the price of a stock on the ith day, determine the maximum profit achievable by buying on one day and selling on a later day. If no profit is possible, return 0. Sample Test Cases: Input: [7,1,5,3,6,4] Output: 5; Input: [7,6,4,3,1] Output: 0.","Brute Force Solution: Iterate through all pairs of days, calculating profit for each buy-sell combination, and track the maximum profit. Time Complexity: O(n²). Optimized Solution: Traverse the array once, keeping track of the minimum price encountered so far and the maximum profit achievable by selling at the current day's price. Time Complexity: O(n). Key Points: Maintain two variables—one for the minimum price and another for the maximum profit; update these as you iterate through the array to ensure an efficient solution."
+"Find Peak Element (162, Medium): Given a 0-indexed integer array `nums`, find a peak element and return its index. A peak element is an element that is strictly greater than its neighbors. You may assume that `nums[-1] = nums[n] = -∞`. You must write an algorithm that runs in O(log n) time. Examples: Input: [1,2,3,1] Output: 2. Input: [1,2,1,3,5,6,4] Output: 1 or 5.",Brute Force: Iterate through the array and check each element to see if it's greater than its neighbors. Time Complexity: O(n). Optimized Solution: Use binary search by comparing the middle element with its right neighbor to decide which half to search. Time Complexity: O(log n). Key Points: Utilize binary search to achieve logarithmic time complexity; compare mid element with its right neighbor to determine search direction; ensure to handle edge cases where the peak is at the beginning or end of the array.
+"Binary Tree Right Side View (199, Medium): Given the root of a binary tree, return the values of the nodes visible from the right side, ordered from top to bottom. Example: Input: root = [1,2,3,null,5,null,4]. Output: [1,3,4].","Brute Force: Perform a level-order traversal (BFS) and collect the last node of each level. Time Complexity: O(n). Optimized: Use BFS to traverse the tree level by level, adding the rightmost node of each level to the result list. Time Complexity: O(n). Key Points: Utilize a queue for BFS; at each level, the last node processed is the rightmost node."
+"560. Subarray Sum Equals K (Medium): Given an array of integers nums and an integer k, return the total number of continuous subarrays whose sum equals k. Example: Input: nums = [1,1,1], k = 2. Output: 2.","Brute Force: Iterate over all possible subarrays, calculate their sums, and count those equal to k. Time Complexity: O(n³). Optimized: Use a hashmap to store cumulative sums and their frequencies. For each element, update the cumulative sum and check if (cumulative sum - k) exists in the hashmap to count valid subarrays. Time Complexity: O(n). Key Points: Utilize cumulative sums and a hashmap to efficiently count subarrays summing to k."
+"1650. Lowest Common Ancestor of a Binary Tree III (Medium): Given two nodes of a binary tree, each with a reference to its parent, return their lowest common ancestor (LCA). The LCA is the lowest node that has both nodes as descendants (including a node being a descendant of itself). Example: Input: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1. Output: 3. Explanation: The LCA of nodes 5 and 1 is 3.","Brute Force: 1. Traverse from node p to the root, storing all ancestors in a set. 2. Traverse from node q to the root, checking each ancestor against the set. 3. The first common ancestor found is the LCA. Time Complexity: O(h), where h is the height of the tree. Optimized Solution: 1. Initialize two pointers, a and b, at nodes p and q respectively. 2. Traverse upwards: move a to its parent; if a reaches null, redirect it to q. Move b to its parent; if b reaches null, redirect it to p. 3. Continue until a equals b; this node is the LCA. Time Complexity: O(h), where h is the height of the tree. Key Points: - Utilizing parent references allows upward traversal without additional data structures. - Redirecting pointers upon reaching the root ensures both pointers traverse equal distances, guaranteeing they meet at the LCA."
+"31. Next Permutation (Medium): Given an array of integers representing a permutation, find the next lexicographically greater permutation. If no such permutation exists, rearrange the array to the lowest possible order (i.e., sorted in ascending order). The replacement must be in place and use only constant extra memory. Examples: Input: [1,2,3] → Output: [1,3,2]; Input: [3,2,1] → Output: [1,2,3]; Input: [1,1,5] → Output: [1,5,1].","Brute Force: Generate all permutations, sort them, and find the next one. Time Complexity: O(n!). Optimized: 1) Find the first decreasing element from the right (pivot). 2) Find the smallest element greater than the pivot to its right and swap them. 3) Reverse the subarray after the pivot. Time Complexity: O(n). Key Points: Identify the pivot by scanning from right to left; swap with the smallest larger element; reverse the suffix to get the next permutation."
+"346. Moving Average from Data Stream (Easy): Design a class to calculate the moving average of a stream of integers. Implement the `MovingAverage` class with methods: `MovingAverage(int size)` to initialize the object with the size of the window, and `double next(int val)` to return the moving average of the last `size` values of the stream. Example: `MovingAverage movingAverage = new MovingAverage(3); movingAverage.next(1); // return 1.0 movingAverage.next(10); // return 5.5 movingAverage.next(3); // return 4.66667 movingAverage.next(5); // return 6.0`","Brute Force: Store all incoming values in a list. For each `next(val)` call, add the new value to the list and compute the sum of the last `size` elements to calculate the average. Time Complexity: O(size) per `next` call. Optimized Solution: Use a queue to maintain the sliding window of the last `size` values and a running sum. For each `next(val)` call, add the new value to the queue and update the running sum. If the queue exceeds the window size, remove the oldest value and adjust the sum accordingly. Compute the average by dividing the running sum by the number of elements in the queue. Time Complexity: O(1) per `next` call. Key Points: Maintain a fixed-size queue to store the most recent values. Keep a running sum to efficiently compute the moving average. Ensure that when the queue exceeds the window size, the oldest value is removed to maintain the correct window size. This approach ensures constant time complexity for each `next` call, making it efficient for large data streams."
+"Minimum Window Substring (76, Hard): Given two strings s and t, find the minimum window in s which will contain all the characters in t. If no such window exists, return an empty string. Input: s = 'ADOBECODEBANC', t = 'ABC'. Output: 'BANC'.","Brute Force: Generate all substrings of s and check if each contains all characters of t. Time Complexity: O(n³). Optimized: Use a sliding window with two pointers to expand and contract the window while maintaining character counts. Time Complexity: O(n). Key Points: Utilize a character frequency map for t, expand the window until all characters are included, then contract to find the minimum window."
+"Copy List with Random Pointer (138, Medium): Given a linked list where each node contains an additional random pointer, return a deep copy of the list. Input: head = [[7,null],[13,0],[11,4],[10,2],[1,0]]. Output: [[7,null],[13,0],[11,4],[10,2],[1,0]].",Brute Force: Use a hashmap to store original-to-copy node mappings. First pass: create copies of nodes and store in hashmap. Second pass: set next and random pointers using the hashmap. Time Complexity: O(n). Optimized: Interleave copied nodes with original nodes. First pass: create and insert copied nodes after each original node. Second pass: set random pointers for copied nodes. Third pass: separate the original and copied lists. Time Complexity: O(n). Key Points: Interleaving nodes allows setting random pointers without extra space. Separating the lists restores the original list and extracts the copied list.
+"236. Lowest Common Ancestor of a Binary Tree (medium): Given a binary tree, find the lowest common ancestor (LCA) of two given nodes in the tree. The LCA is defined as the lowest node that has both nodes as descendants (including a node being a descendant of itself). Example: Input: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1. Output: 3. Explanation: The LCA of nodes 5 and 1 is 3.","Brute Force: Traverse the tree to find paths to both nodes, then compare paths to find the last common node. Time Complexity: O(n) for each path, O(n) space for path storage. Optimized Solution: Use a recursive approach to traverse the tree. If the current node is null or matches one of the target nodes, return it. Recursively search left and right subtrees. If both sides return non-null, the current node is the LCA. If only one side returns non-null, propagate that result up. Time Complexity: O(n), where n is the number of nodes. Key Points: Utilize depth-first search; handle cases where one node is an ancestor of the other; ensure both nodes exist in the tree."
+"498. Diagonal Traverse (Medium): Given an m x n matrix, return all elements in diagonal order. Example: Input: [[1,2,3],[4,5,6],[7,8,9]] Output: [1,2,4,7,5,3,6,8,9]","Brute Force: Group elements by diagonals using sum of indices, reverse even-indexed diagonals, and concatenate. Time Complexity: O(m * n). Optimized: Simulate diagonal traversal with direction flag, adjusting indices and direction at boundaries. Time Complexity: O(m * n). Key Points: Manage direction changes at matrix boundaries; ensure each element is processed once."
+"Custom Sort String (791, Medium): Given two strings `order` and `s`, where `order` contains unique characters representing a custom sort order, rearrange the characters in `s` to match this order. Characters in `s` not present in `order` can appear in any position after the ordered characters.
+
+**Example 1:**
+- Input: `order = cba""`","`s = ""abcd""`"
+"938. Range Sum of BST (Easy): Given the root of a Binary Search Tree (BST) and two integers low and high, return the sum of values of all nodes with a value in the inclusive range [low, high]. Sample Test Cases: Input: root = [10,5,15,3,7,null,18], low = 7, high = 15. Output: 32. Explanation: Nodes 7, 10, and 15 are in the range [7, 15]. 7 + 10 + 15 = 32. Input: root = [10,5,15,3,7,13,18,1,null,6], low = 6, high = 10. Output: 23. Explanation: Nodes 6, 7, and 10 are in the range [6, 10]. 6 + 7 + 10 = 23.","Brute Force Solution: Traverse all nodes in the BST and sum the values of nodes within the range [low, high]. Time Complexity: O(n), where n is the number of nodes in the BST. Optimized Solution: Utilize the BST property to prune unnecessary branches: 1. If the current node's value is within [low, high], add it to the sum and explore both left and right subtrees. 2. If the current node's value is less than low, explore only the right subtree. 3. If the current node's value is greater than high, explore only the left subtree. Time Complexity: O(n) in the worst case (unbalanced tree), but can be less in a balanced tree due to pruning. Key Points: Leverage the BST property to avoid traversing nodes that cannot fall within the range, thereby optimizing the search process."
+"Shortest Path in Binary Matrix (1091, Medium): Given an n x n binary matrix grid, return the length of the shortest clear path from the top-left to the bottom-right cell. A clear path consists of cells with value 0, connected 8-directionally. If no such path exists, return -1. Examples: Input: grid = [[0,1],[1,0]] Output: 2; Input: grid = [[0,0,0],[1,1,0],[1,1,0]] Output: 4; Input: grid = [[1,0,0],[1,1,0],[1,1,0]] Output: -1.","Brute Force: Explore all possible paths using Depth-First Search (DFS), checking each path's validity and length. Time Complexity: O(8^(n²)) due to exponential growth with grid size. Optimized Solution: Use Breadth-First Search (BFS) to explore the shortest path first, utilizing a queue to traverse the grid level by level. Time Complexity: O(n²) in the worst case, as each cell is processed once. Key Points: BFS is suitable for finding the shortest path in unweighted grids; consider all 8 possible directions for movement; mark cells as visited to avoid reprocessing."
+"Two Sum (1, Easy): Given an array of integers `nums` and an integer `target`, return indices of the two numbers such that they add up to `target`. You may assume that each input would have exactly one solution, and you may not use the same element twice. You can return the answer in any order. Example: Input: nums = [2,7,11,15], target = 9. Output: [0,1].","Brute Force: Iterate through each pair of numbers in the array to check if their sum equals the target. Time Complexity: O(n²). Optimized Solution: Use a hash table to store each number's index as you iterate through the array. For each number, calculate its complement (target - current number) and check if it's already in the hash table. If it is, return the current index and the index of the complement. Time Complexity: O(n). Key Points: This approach leverages the hash table for constant-time lookups, reducing the need for nested loops and improving efficiency."
+"34. Find First and Last Position of Element in Sorted Array (Medium): Given an array of integers `nums` sorted in non-decreasing order, find the starting and ending position of a given `target` value. If `target` is not found in the array, return `[-1, -1]`. You must write an algorithm with `O(log n)` runtime complexity. Examples: Input: nums = [5,7,7,8,8,10], target = 8. Output: [3,4]. Input: nums = [5,7,7,8,8,10], target = 6. Output: [-1,-1]. Input: nums = [], target = 0. Output: [-1,-1].","Brute Force: Iterate through the array to find the first and last occurrences of the target. Time Complexity: O(n). Optimized Solution: Utilize binary search to find the first and last positions of the target. First, perform a binary search to find the leftmost (first) occurrence of the target by adjusting the search range to the left upon finding the target. Then, perform a binary search to find the rightmost (last) occurrence by adjusting the search range to the right upon finding the target. Time Complexity: O(log n). Key Points: Leverage the sorted nature of the array to apply binary search, ensuring an O(log n) solution. Conduct two separate binary searches: one for the first occurrence and another for the last occurrence of the target."
+"146. LRU Cache (Medium): Design a data structure that follows the constraints of a Least Recently Used (LRU) cache. Implement the `LRUCache` class with methods `get(int key)` and `put(int key, int value)`, both operating in O(1) time complexity. If the cache reaches its capacity, it should evict the least recently used item. Example: `LRUCache lRUCache = new LRUCache(2); lRUCache.put(1, 1); lRUCache.put(2, 2); lRUCache.get(1); // returns 1 lRUCache.put(3, 3); // evicts key 2 lRUCache.get(2); // returns -1 lRUCache.put(4, 4); // evicts key 1 lRUCache.get(1); // returns -1 lRUCache.get(3); // returns 3 lRUCache.get(4); // returns 4`","Brute Force: Use a list to store key-value pairs; on each `get` or `put`, search the list to update or retrieve values, and move the accessed item to the front. Time Complexity: O(n) per operation. Optimized Solution: Utilize a combination of a hash map and a doubly linked list. The hash map provides O(1) access to nodes, while the doubly linked list maintains the order of usage. On `get`, move the accessed node to the front; on `put`, add new nodes to the front and remove the least recently used node from the tail if capacity is exceeded. Time Complexity: O(1) per operation. Key Points: - Hash map ensures O(1) access to cache items. - Doubly linked list maintains the order of usage, allowing O(1) updates to the order. - This combination efficiently supports the LRU cache operations within the required time complexity."
+"378. Kth Smallest Element in a Sorted Matrix (medium): Given an n x n matrix where each row and column is sorted in ascending order, return the kth smallest element in the matrix. Note that it is the kth smallest element in the sorted order, not the kth distinct element. Example: Input: matrix = [[1,5,9],[10,11,13],[12,13,15]], k = 8. Output: 13. Explanation: The elements in the matrix are [1,5,9,10,11,12,13,13,15], and the 8th smallest number is 13.","Brute Force: Flatten the matrix into a list, sort it, and return the kth element. Time Complexity: O(n² log n²). Optimized Solution: Use a min-heap to merge rows efficiently. Initialize the heap with the first element of each row. Extract the smallest element from the heap k times; the kth extraction gives the kth smallest element. Time Complexity: O(k log n). Key Points: Utilize the sorted property of rows and columns; maintain a heap of size at most n; only push the next element in the same row to avoid duplicates."
+"670. Maximum Swap (Medium): Given a non-negative integer, swap two digits at most once to obtain the maximum possible number. Return this maximum number. Examples: Input: 2736, Output: 7236. Input: 9973, Output: 9973.","Brute Force: Convert number to list of digits. Try all possible pairs of swaps, convert back to number, and track the maximum. Time Complexity: O(n²). Optimized: Convert number to list of digits. Track the last occurrence of each digit (0-9). For each digit, check for a larger digit to its right using the last occurrence data. If found, swap and return the new number. Time Complexity: O(n). Key Points: Use a greedy approach to find the first beneficial swap. Tracking the last occurrence of each digit allows efficient identification of optimal swaps."
+"5. Longest Palindromic Substring (Medium): Given a string s, return the longest palindromic substring in s. Examples: Input: 'babad' Output: 'bab' (or 'aba'); Input: 'cbbd' Output: 'bb'.","Brute Force: Check all substrings and verify if each is a palindrome. Time Complexity: O(n³). Optimized Solution: Expand around each character and pair of consecutive characters as potential centers, expanding outwards while the substring is a palindrome. Time Complexity: O(n²). Key Points: This approach leverages the fact that a palindrome mirrors around its center, reducing unnecessary checks. ([kodeao.com](https://kodeao.com/longest-palindromic-substring-leetcode-5/?utm_source=openai))"
+"14. Longest Common Prefix (Easy): Write a function to find the longest common prefix string amongst an array of strings. If there is no common prefix, return an empty string \\"". Example 1: Input: strs = [\""flower\","\""flow\"
+"Subsets (78, Medium): Given an integer array nums of unique elements, return all possible subsets (the power set). The solution set must not contain duplicate subsets. Example: Input: nums = [1,2,3]. Output: [[], [1], [2], [1,2], [3], [1,3], [2,3], [1,2,3]].","Brute Force: Generate all possible combinations of elements, checking each subset for uniqueness. Time Complexity: O(n * 2^n). Optimized: Use backtracking to explore inclusion/exclusion of each element, or bit manipulation to represent subsets. Time Complexity: O(n * 2^n). Key Points: Backtracking systematically explores all combinations; bit manipulation leverages binary representation to generate subsets efficiently."
+"Sum Root to Leaf Numbers (129, Medium): Given a binary tree containing digits from 0 to 9, each root-to-leaf path represents a number. Return the total sum of all root-to-leaf numbers.
+
+**Example 1:**
+Input: [1,2,3]
+Output: 25
+Explanation:
+- Path 1->2 represents the number 12.
+- Path 1->3 represents the number 13.
+Total sum = 12 + 13 = 25.
+
+**Example 2:**
+Input: [4,9,0,5,1]
+Output: 1026
+Explanation:
+- Path 4->9->5 represents the number 495.
+- Path 4->9->1 represents the number 491.
+- Path 4->0 represents the number 40.
+Total sum = 495 + 491 + 40 = 1026.","**Brute Force Approach:**
+1. Generate all root-to-leaf paths.
+2. Convert each path to its corresponding number.
+3. Sum all these numbers.
+
+**Time Complexity:** O(n), where n is the number of nodes in the tree.
+
+**Optimized Approach:**
+1. Use Depth-First Search (DFS) to traverse the tree.
+2. Maintain a running sum that represents the current number formed.
+3. At each node, update the running sum: `current_sum = current_sum * 10 + node.val`.
+4. If a leaf node is reached, add the current sum to the total sum.
+5. Recursively apply the process to left and right subtrees.
+
+**Time Complexity:** O(n), where n is the number of nodes in the tree.
+
+**Key Points:**
+- Utilize DFS to traverse the tree efficiently.
+- Maintain a running sum to represent the number formed along the path.
+- Add the running sum to the total sum upon reaching a leaf node."
+"173. Binary Search Tree Iterator (medium): Implement an iterator over a binary search tree (BST) that returns the next smallest number in the BST. Input: BST with root node. Output: Iterator supporting next() and hasNext() operations. Example: BSTIterator bSTIterator = new BSTIterator([7, 3, 15, null, null, 9, 20]); bSTIterator.next(); // return 3 bSTIterator.next(); // return 7 bSTIterator.hasNext(); // return True bSTIterator.next(); // return 9 bSTIterator.hasNext(); // return True bSTIterator.next(); // return 15 bSTIterator.hasNext(); // return True bSTIterator.next(); // return 20 bSTIterator.hasNext(); // return False","Brute Force: Perform an in-order traversal of the BST and store the values in a list. next(): Return the next element from the list. hasNext(): Check if there are more elements in the list. Time Complexity: O(n) for initialization, O(1) for next() and hasNext(). Optimized: Use a stack to simulate in-order traversal. Initialize by pushing all leftmost nodes onto the stack. next(): Pop the top node, push all leftmost nodes of its right subtree onto the stack, and return the node's value. hasNext(): Check if the stack is non-empty. Time Complexity: O(h) for initialization, O(1) average for next() and hasNext(). Key Points: The optimized approach uses O(h) space, where h is the height of the tree. It provides average O(1) time complexity for next() and hasNext() operations. This method efficiently simulates in-order traversal without storing all nodes."
+"986. Interval List Intersections (Medium): Given two lists of closed intervals, each list is pairwise disjoint and sorted. Return their intersection. Example: Input: firstList = [[0,2],[5,10],[13,23],[24,25]], secondList = [[1,5],[8,12],[15,24],[25,26]]. Output: [[1,2],[5,5],[8,10],[15,23],[24,24],[25,25]].","Brute Force: Compare each interval in firstList with every interval in secondList to find intersections. Time Complexity: O(m * n), where m and n are the lengths of firstList and secondList. Optimized: Use two pointers to traverse both lists simultaneously, comparing current intervals and moving the pointer of the interval that ends first. Time Complexity: O(m + n). Key Points: Utilize the sorted nature of the lists and the two-pointer technique to efficiently find intersections."
+"987. Vertical Order Traversal of a Binary Tree (Hard): Given the root of a binary tree, return its vertical order traversal. For each node at position (row, col), its left and right children are at positions (row + 1, col - 1) and (row + 1, col + 1), respectively. The root is at (0, 0). Nodes in the same row and column should be ordered by their values. Input: root = [3,9,20,null,null,15,7]. Output: [[9],[3,15],[20],[7]].","Brute Force: Traverse the tree and store nodes in a list with their coordinates. Sort the list by column, row, and value. Group nodes by column. Time Complexity: O(n log n). Optimized: Use a map to store nodes by column, with a nested map for rows and a multiset for values. Perform a DFS to populate the map, then extract the values in order. Time Complexity: O(n log n). Key Points: Use a map of maps with multisets to efficiently group and sort nodes by column, row, and value during traversal."
+"1762. Buildings With an Ocean View (Medium): Given an array `heights` representing building heights in a line with the ocean to the right, return the indices of buildings that have an unobstructed ocean view. A building has an ocean view if all buildings to its right are shorter. Input: [4,2,3,1]. Output: [0,2,3].","Brute Force: For each building, check all buildings to its right to determine if it has an ocean view. Time Complexity: O(n²). Optimized: Traverse the array from right to left, keeping track of the maximum height seen so far. If the current building is taller than this maximum, it has an ocean view. Time Complexity: O(n). Key Points: Iterate from right to left; maintain the maximum height encountered; append indices of buildings taller than this maximum; reverse the result to get indices in increasing order."
+"13. Roman to Integer (Easy): Convert a Roman numeral string to its integer equivalent. Roman numerals are represented by seven symbols: I (1), V (5), X (10), L (50), C (100), D (500), and M (1000). For example, 'III' equals 3, 'LVIII' equals 58, and 'MCMXCIV' equals 1994.","Brute Force: Iterate through the string, checking each character and its successor to handle subtraction cases, summing values accordingly. Time Complexity: O(n). Optimized: Traverse the string from right to left, adding values unless a smaller numeral precedes a larger one, in which case subtract. Time Complexity: O(n). Key Points: Use a dictionary to map Roman numerals to integers; handle subtractive combinations by comparing current and next values; ensure a single pass through the string for efficiency."
+"33. Search in Rotated Sorted Array (Medium): Given a rotated sorted array and a target value, return the index of the target if found, otherwise return -1. You must write an algorithm with O(log n) runtime complexity. Example: Input: nums = [4,5,6,7,0,1,2], target = 0. Output: 4.",Brute Force: Iterate through the array to find the target. Time Complexity: O(n). Optimized: Use modified binary search to account for rotation. Time Complexity: O(log n). Key Points: Identify which half of the array is sorted; determine if the target lies within the sorted half; adjust search space accordingly.
+"415. Add Strings (Easy): Given two non-negative integers, num1 and num2, represented as strings, return their sum as a string. You must not use any built-in library for handling large integers, nor convert the inputs to integers directly.
+
+**Example 1:**
+- Input: num1 = \11\","num2 = \""123\"
+"Sliding Window Median (480, Hard): Given an integer array nums and an integer k, find the median of each sliding window of size k as it moves from the left to the right end of the array. The median is the middle value in an ordered integer list; if the size is even, it's the mean of the two middle values. Input: nums = [1,3,-1,-3,5,3,6,7], k = 3. Output: [1.0,-1.0,-1.0,3.0,5.0,6.0].","Brute Force: For each window, extract the subarray, sort it, and find the median. Time Complexity: O(n * k log k). Optimized: Use two heaps (a max-heap for the smaller half and a min-heap for the larger half) to maintain the window's elements, allowing efficient median retrieval. Time Complexity: O(n log k). Key Points: Maintain balance between the two heaps; handle element removal efficiently to keep the heaps updated as the window slides."
+1. If a word begins with a vowel ('a','e'
+"Minimum Add to Make Parentheses Valid (921, Medium): Given a string s of '(' and ')', return the minimum number of parentheses needed to make the string valid. Example: Input: '())', Output: 1. Input: '(((', Output: 3.","Brute Force: Insert parentheses at all positions to check for validity, O(2^n). Optimized: Use counters to track unmatched '(' and ')', O(n). Key: Maintain balance between opening and closing parentheses while iterating."
+"973. K Closest Points to Origin (medium): Given an array of points where each point is represented as [x, y] on the X-Y plane, and an integer k, return the k closest points to the origin (0, 0). The distance between two points is the Euclidean distance. You may return the answer in any order. The answer is guaranteed to be unique (except for the order that it is in). Sample Test Cases: Input: points = [[1,3],[-2,2]], k = 1; Output: [[-2,2]]. Input: points = [[3,3],[5,-1],[-2,4]], k = 2; Output: [[3,3],[-2,4]].","Brute Force Solution: 1. Calculate the squared Euclidean distance for each point to avoid unnecessary square root calculations. 2. Sort all points based on their squared distances. 3. Return the first k points from the sorted list. Time Complexity: O(n log n), where n is the number of points, due to the sorting step. Optimized Solution: 1. Use a max-heap (priority queue) to keep track of the k closest points. 2. Iterate through each point, calculate its squared distance from the origin, and maintain a heap of size k containing the closest points seen so far. 3. If the heap exceeds size k, remove the point with the largest distance. 4. At the end, the heap contains the k closest points. Time Complexity: O(n log k), where n is the number of points and k is the number of closest points to find. Key Points: - Avoid computing the actual Euclidean distance; comparing squared distances is sufficient and more efficient. - Using a max-heap of size k ensures that we only keep track of the k closest points, improving efficiency over sorting all points. - Be cautious with edge cases, such as when k equals the number of points, or when multiple points have the same distance to the origin."
+"1004. Max Consecutive Ones III (Medium): Given a binary array nums and an integer k, return the maximum number of consecutive 1's in the array if you can flip at most k 0's. Example: Input: nums = [1,1,1,0,0,0,1,1,1,1,0], k = 2. Output: 6. Explanation: Flip the two 0's at indices 3 and 4 to get [1,1,1,1,1,0,1,1,1,1,0], resulting in six consecutive 1's.","Brute Force: Check all subarrays, count zeros, and verify if they can be flipped within k. Time Complexity: O(n³). Optimized: Use a sliding window approach with two pointers to maintain a window containing at most k zeros. Expand the window by moving the right pointer; if zeros exceed k, move the left pointer to reduce zeros. Track the maximum window size. Time Complexity: O(n). Key Points: Utilize the sliding window technique to efficiently find the longest subarray with at most k zeros, ensuring optimal performance for large inputs."
+"1209. Remove All Adjacent Duplicates in String II (medium): Given a string s and an integer k, remove k adjacent duplicates repeatedly until no more can be removed. Return the final string.
+
+**Example 1:**
+- Input: s = abcd",k = 2
+"Valid Palindrome III (1216, Hard): Given a string s and an integer k, determine if s is a k-palindrome. A string is k-palindrome if it can be transformed into a palindrome by removing at most k characters. Example: Input: s = 'abcdeca', k = 2. Output: true. Explanation: Remove 'b' and 'e' characters.","Brute Force: Generate all possible subsequences by removing up to k characters and check if any is a palindrome. Time Complexity: O(2^n). Optimized: Use dynamic programming to find the length of the longest palindromic subsequence (LPS). If the difference between the string's length and LPS is ≤ k, return true. Time Complexity: O(n²). Key Points: Transform the problem into finding the LPS; the minimum deletions required to make s a palindrome is s.length - LPS; if this value is ≤ k, s is a k-palindrome."
+"1539. Kth Missing Positive Number (Easy): Given a sorted array of positive integers and an integer k, find the kth missing positive integer. Example: Input: arr = [2,3,4,7,11], k = 5. Output: 9.","Brute Force: Iterate through numbers from 1, counting those not in arr until k missing numbers are found. Time Complexity: O(n + k). Optimized: Use binary search to find the position where the kth missing number would be, leveraging the sorted nature of arr. Time Complexity: O(log n). Key Points: Calculate missing numbers up to arr[i] as arr[i] - (i + 1); use binary search to efficiently locate the kth missing number."
+"Remove Nth Node From End of List (19, Medium): Given the head of a linked list, remove the nth node from the end of the list and return its head. Example: Input: head = [1,2,3,4,5], n = 2. Output: [1,2,3,5].","Brute Force: 1. Traverse the list to determine its length (L). 2. Calculate the position to remove from the start: L - n + 1. 3. Traverse again to this position and adjust pointers to remove the node. Time Complexity: O(n) for two passes. Optimized: 1. Use two pointers, both starting at a dummy node before head. 2. Move the first pointer n+1 steps ahead. 3. Move both pointers until the first reaches the end. 4. The second pointer will be just before the target node; adjust its next pointer to remove the target node. Time Complexity: O(n) for a single pass. Key Points: - Using a dummy node simplifies edge cases, such as removing the head. - The two-pointer technique allows for a single traversal, improving efficiency."
+"Valid Parentheses (20, Easy): Given a string containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid. An input string is valid if: 1. Open brackets must be closed by the same type of brackets. 2. Open brackets must be closed in the correct order. 3. Every close bracket has a corresponding open bracket of the same type. Examples: Input: '()' Output: true. Input: '()[]{}' Output: true. Input: '(]' Output: false. Input: '([)]' Output: false. Input: '{[]}' Output: true.","Brute Force: Count occurrences of each bracket type and check if they match. This method fails for nested or improperly ordered brackets. Time Complexity: O(n). Optimized Solution: Use a stack to track opening brackets. For each character in the string: - If it's an opening bracket, push it onto the stack. - If it's a closing bracket, check if the stack is empty or if the top of the stack doesn't match the corresponding opening bracket; if so, return false. - Otherwise, pop the top of the stack. After processing all characters, if the stack is empty, the string is valid; otherwise, it's invalid. Time Complexity: O(n). Key Points: - The stack-based approach efficiently handles nested and ordered brackets. - Ensure to check for an empty stack when encountering a closing bracket to avoid errors. - This method guarantees that all opening brackets have a corresponding and correctly ordered closing bracket."
+"102. Binary Tree Level Order Traversal (medium): Given the root of a binary tree, return the level order traversal of its nodes' values. (i.e., from left to right, level by level). Sample Test Cases: Input: root = [3,9,20,null,null,15,7] Output: [[3],[9,20],[15,7]] Input: root = [1] Output: [[1]] Input: root = [] Output: []","Brute Force Solution: Use a queue to perform a breadth-first search (BFS). Enqueue the root node, then for each node, dequeue it, record its value, and enqueue its children. Repeat until the queue is empty. Time Complexity: O(n), where n is the number of nodes in the tree. Optimized Solution: The BFS approach described is already optimal for this problem. Key Points: - Utilize a queue to manage nodes at each level. - Process nodes level by level, recording their values and enqueuing their children. - Ensure to handle edge cases, such as an empty tree."
+"Valid Palindrome (125, Easy): Determine if a given string is a palindrome, considering only alphanumeric characters and ignoring cases.
+
+**Problem Description:**
+A phrase is a palindrome if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward. Alphanumeric characters include letters and numbers.
+
+**Sample Test Cases:**
+1. Input: s = \A man",a plan
+"133. Clone Graph (medium): Given a reference to a node in a connected undirected graph, return a deep copy (clone) of the graph. Each node contains a value (int) and a list of its neighbors. Example: Input: adjList = [[2,4],[1,3],[2,4],[1,3]]. Output: [[2,4],[1,3],[2,4],[1,3]].","Brute Force: Traverse the graph and create new nodes without tracking visited nodes, leading to redundant copies and potential infinite loops in cyclic graphs. Time Complexity: O(N + M), where N is the number of nodes and M is the number of edges. Optimized Solution: Use Depth-First Search (DFS) with a hashmap to track visited nodes. For each node, if it's already cloned, return the clone; otherwise, create a new node, recursively clone its neighbors, and map the original node to its clone. Time Complexity: O(N + M). Key Points: Utilize a hashmap to avoid redundant cloning and handle cycles efficiently; DFS ensures all nodes and edges are processed once."
+"Course Schedule (207, Medium): Determine if it's possible to finish all courses given prerequisites.
+
+**Problem Description:**
+You are given `numCourses` labeled from `0` to `numCourses - 1` and an array `prerequisites` where `prerequisites[i] = [a, b]` indicates that to take course `a`, you must first take course `b`.
+
+**Sample Test Cases:**
+- Input: `numCourses = 2`, `prerequisites = [[1,0]]`
+  Output: `true`
+  Explanation: To take course 1, you should have finished course 0. So it is possible.
+
+- Input: `numCourses = 2`, `prerequisites = [[1,0],[0,1]]`
+  Output: `false`
+  Explanation: Courses 0 and 1 form a cycle, making it impossible to complete both.","**Brute Force Solution:**
+1. Generate all possible course orders.
+2. For each order, check if it satisfies all prerequisites.
+3. If any order is valid, return `true`; otherwise, return `false`.
+
+**Time Complexity:** O((numCourses!) * numCourses)
+
+**Optimized Solution:** Use Topological Sorting with Kahn's Algorithm:
+1. Build a directed graph where each course points to courses dependent on it.
+2. Create an in-degree array to count prerequisites for each course.
+3. Initialize a queue with courses having zero in-degree (no prerequisites).
+4. Process courses from the queue:
+   - Take the course and reduce the in-degree of its dependent courses.
+   - If a dependent course's in-degree becomes zero, add it to the queue.
+5. If all courses are processed, return `true`; otherwise, return `false`.
+
+**Time Complexity:** O(numCourses + prerequisites.length)
+
+**Key Points:**
+- Model the problem as a directed graph.
+- Detect cycles using topological sorting.
+- Courses with zero in-degree can be taken immediately.
+- If a cycle exists, it's impossible to complete all courses."
+"Expression Add Operators (282, Hard): Given a string num containing only digits and an integer target, insert the binary operators '+', '-', and '*' between the digits in num so that the resulting expression evaluates to target. Operands in the expressions should not have leading zeros.
+
+**Example 1:**
+- Input: num = \123\",target = 6
+"303. Range Sum Query - Immutable (Easy): Given an integer array nums, implement the NumArray class with methods to initialize the object and return the sum of elements between indices left and right inclusive. Example: Input: nums = [-2, 0, 3, -5, 2, -1], sumRange(0, 2) returns 1, sumRange(2, 5) returns -1, sumRange(0, 5) returns -3.","Brute Force: For each sumRange query, iterate from left to right, summing elements. Time Complexity: O(n) per query. Optimized Solution: Precompute a prefix sum array where each element at index i stores the sum of elements from the start up to i. For sumRange(left, right), return prefixSum[right + 1] - prefixSum[left]. Time Complexity: O(n) for initialization, O(1) per query. Key Points: Precompute prefix sums to allow constant-time range sum queries; this approach is efficient for multiple queries on an immutable array."
+"Next Greater Element III (556, Medium): Given a positive integer n, find the smallest integer that has exactly the same digits as n and is greater in value than n. If no such integer exists or the result does not fit in a 32-bit integer, return -1.
+
+**Example 1:**
+- Input: n = 12
+- Output: 21
+
+**Example 2:**
+- Input: n = 21
+- Output: -1","**Brute Force Approach:**
+1. Generate all permutations of the digits of n.
+2. Convert each permutation to an integer.
+3. Identify the smallest integer greater than n.
+4. If no such integer exists or it exceeds 32-bit integer range, return -1.
+
+**Time Complexity:** O(n!), where n is the number of digits in n.
+
+**Optimized Approach:**
+1. Convert n to a list of its digits.
+2. Traverse the list from right to left to find the first decreasing digit (pivot).
+3. If no pivot is found, return -1.
+4. Find the smallest digit greater than the pivot to its right.
+5. Swap the pivot with this digit.
+6. Reverse the digits to the right of the pivot to get the smallest possible number.
+7. Convert the list back to an integer.
+8. If the result exceeds 32-bit integer range, return -1; otherwise, return the result.
+
+**Time Complexity:** O(n), where n is the number of digits in n.
+
+**Key Points:**
+- The problem is akin to finding the next lexicographical permutation of the digits.
+- Identifying the pivot is crucial; it's the first digit from the right that is smaller than its next digit.
+- After swapping, reversing the suffix ensures the next smallest permutation.
+- Always check for integer overflow to ensure the result fits within a 32-bit integer."
+"647. Palindromic Substrings (medium): Given a string s, return the number of palindromic substrings in it. A string is a palindrome when it reads the same backward as forward. A substring is a contiguous sequence of characters within the string. Sample test cases: Input: s = 'abc' Output: 3 Explanation: Three palindromic substrings: 'a', 'b', 'c'. Input: s = 'aaa' Output: 6 Explanation: Six palindromic substrings: 'a', 'a', 'a', 'aa', 'aa', 'aaa'.","Brute Force Solution: Generate all possible substrings of s and check each for palindromicity by comparing the substring with its reverse. Increment a counter for each palindrome found. Time Complexity: O(n³) due to generating O(n²) substrings and checking each in O(n) time. Optimized Solution: Use the 'expand around center' approach by treating each character and each pair of adjacent characters as potential centers. Expand outwards while characters match, counting palindromic substrings. Time Complexity: O(n²) as there are 2n-1 centers and each expansion takes O(n) in the worst case. Key Points: This method efficiently counts palindromic substrings without generating all substrings explicitly, reducing both time and space complexity compared to the brute force approach."
+"958. Check Completeness of a Binary Tree (Medium): Given the root of a binary tree, determine if it is a complete binary tree. A complete binary tree is defined as a binary tree in which every level, except possibly the last, is completely filled, and all nodes in the last level are as far left as possible. Sample Test Cases: Input: root = [1,2,3,4,5,6] Output: true Explanation: Every level before the last is full (i.e., levels with node-values {1} and {2, 3}), and all nodes in the last level ({4, 5, 6}) are as far left as possible. Input: root = [1,2,3,4,5,null,7] Output: false Explanation: The node with value 7 isn't as far left as possible.","Brute Force Solution: Perform a level-order traversal (BFS) of the tree. During traversal, if a null node is encountered, ensure that no non-null nodes appear afterward. If a non-null node appears after a null node, the tree is not complete. Time Complexity: O(n), where n is the number of nodes in the tree. Optimized Solution: The optimized approach is similar to the brute force method, utilizing a queue for level-order traversal. The key optimization is to terminate the traversal early if a non-null node is found after a null node, reducing unnecessary operations. Time Complexity: O(n), where n is the number of nodes in the tree. Key Points to Remember: - A complete binary tree has all levels fully filled except possibly the last, which is filled from left to right. - During level-order traversal, encountering a non-null node after a null node indicates the tree is not complete. - Using a queue facilitates efficient level-order traversal to check completeness."
+"1060. Missing Element in Sorted Array (Medium): Given a sorted array of unique integers and an integer k, find the k-th missing number starting from the leftmost number of the array. Example: Input: nums = [4,7,9,10], k = 1. Output: 5. Explanation: The first missing number is 5.","Brute Force: Iterate through the array, counting missing numbers between consecutive elements until reaching the k-th missing number. Time Complexity: O(n). Optimized: Use binary search to find the position where the k-th missing number would be, based on the count of missing numbers up to each index. Time Complexity: O(log n). Key Points: Calculate missing numbers up to an index as nums[i] - nums[0] - i; use binary search to efficiently locate the k-th missing number."
+"Diagonal Traverse II (1424, Medium): Given a 2D integer array `nums`, return all elements of `nums` in diagonal order. Example: Input: `nums = [[1,2,3],[4,5,6],[7,8,9]]`. Output: `[1,4,2,7,5,3,8,6,9]`.","Brute Force: Iterate through all possible diagonal sums, collecting elements for each diagonal. Time Complexity: O(N), where N is the total number of elements. Optimized: Use a hash map to group elements by the sum of their row and column indices, then traverse the map in order. Time Complexity: O(N). Key Points: Group elements by diagonal index (i + j), reverse each diagonal's list before adding to result, handle varying row lengths."
+"2265. Count Nodes Equal to Average of Subtree (Medium): Given the root of a binary tree, return the number of nodes where the value of the node is equal to the average of the values in its subtree. Note: The average of n elements is the sum of the n elements divided by n and rounded down to the nearest integer. A subtree of root is a tree consisting of root and all of its descendants. Example 1: Input: root = [4,8,5,0,1,null,6] Output: 5 Explanation: For the node with value 4: The average of its subtree is (4 + 8 + 5 + 0 + 1 + 6) / 6 = 24 / 6 = 4. For the node with value 5: The average of its subtree is (5 + 6) / 2 = 11 / 2 = 5. For the node with value 0: The average of its subtree is 0 / 1 = 0. For the node with value 1: The average of its subtree is 1 / 1 = 1. For the node with value 6: The average of its subtree is 6 / 1 = 6. Example 2: Input: root = [1] Output: 1 Explanation: For the node with value 1: The average of its subtree is 1 / 1 = 1.","Brute Force: For each node, traverse its entire subtree to calculate the sum and count of nodes, then compute the average and compare it to the node's value. Time Complexity: O(n²) in the worst case, where n is the number of nodes, due to repeated traversal of subtrees. Optimized Solution: Use a post-order depth-first search (DFS) traversal to compute the sum and count of nodes in each subtree. For each node, calculate the average and compare it to the node's value. Time Complexity: O(n), as each node is visited once. Key Points: - Utilize post-order DFS to gather subtree information efficiently. - Maintain a global counter to track nodes matching the condition. - Ensure integer division is used to compute the average, as specified in the problem statement."
+"2. Add Two Numbers (Medium): You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order, and each node contains a single digit. Add the two numbers and return the sum as a linked list. You may assume the two numbers do not contain any leading zeros, except the number 0 itself. Example: Input: l1 = [2,4,3], l2 = [5,6,4]. Output: [7,0,8]. Explanation: 342 + 465 = 807.","Brute Force: Convert each linked list to its integer representation by traversing the list and calculating the number. Add the two integers. Convert the sum back to a linked list by extracting each digit. Time Complexity: O(n + m), where n and m are the lengths of the two linked lists. Optimized Solution: Traverse both linked lists simultaneously, adding corresponding digits along with any carry from the previous addition. Create a new node for each sum's unit digit and carry over the tens digit to the next addition. Continue until both lists are fully traversed and no carry remains. Time Complexity: O(max(n, m)), where n and m are the lengths of the two linked lists. Key Points: - Handle different lengths of linked lists by treating missing nodes as 0. - Maintain a carry variable to account for sums greater than 9. - Ensure the final carry is added as a new node if it's non-zero."
+"Reverse Integer (7, Medium): Given a 32-bit signed integer, reverse its digits. If the reversed integer overflows, return 0. Examples: Input: 123, Output: 321. Input: -123, Output: -321. Input: 120, Output: 21.","Brute Force: Convert integer to string, reverse string, convert back to integer. Time Complexity: O(n), where n is the number of digits. Optimized: Extract digits using modulo and division, construct reversed number, check for overflow. Time Complexity: O(n). Key: Handle overflow by checking if reversed number exceeds 32-bit integer range (-2^31 to 2^31 - 1)."
+"3Sum (15, Medium): Given an integer array nums, return all unique triplets [nums[i], nums[j], nums[k]] such that i ≠ j ≠ k and nums[i] + nums[j] + nums[k] == 0. Input: nums = [-1,0,1,2,-1,-4]. Output: [[-1,-1,2],[-1,0,1]]","Brute Force: Iterate through all triplets using three nested loops, checking if their sum equals zero. Time Complexity: O(n³). Optimized: Sort the array, then for each element, use two pointers to find pairs that sum to the negative of the current element, ensuring unique triplets by skipping duplicates. Time Complexity: O(n²). Key Points: Sorting the array simplifies duplicate handling and allows the two-pointer technique to efficiently find pairs that sum to a target value."
+"4Sum (18, Medium): Given an array nums of n integers, return all unique quadruplets [nums[a], nums[b], nums[c], nums[d]] such that a, b, c, and d are distinct and nums[a] + nums[b] + nums[c] + nums[d] == target. Input: nums = [1,0,-1,0,-2,2], target = 0. Output: [[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]","Brute Force: Iterate through all possible quadruplets using four nested loops, checking if their sum equals the target. Time Complexity: O(n⁴). Optimized Solution: 1. Sort the array. 2. Use two nested loops to fix the first two numbers. 3. Apply the two-pointer technique on the remaining array to find pairs that sum to the required value. 4. Skip duplicate values to ensure unique quadruplets. Time Complexity: O(n³). Key Points: Sorting the array allows efficient duplicate handling and enables the two-pointer technique. Skipping duplicates at each step ensures unique quadruplets. The two-pointer approach reduces the time complexity compared to the brute force method."
+"Remove Duplicates from Sorted Array (26, Easy): Given a sorted integer array nums, remove duplicates in-place so each unique element appears only once. Return the number of unique elements. Example: Input: [1,1,2]. Output: 2, nums = [1,2,_].","Brute Force: Use a temporary array to store unique elements, then copy back to nums. Time: O(n), Space: O(n). Optimized: Use two pointers; one iterates through nums, the other tracks position for unique elements. Time: O(n), Space: O(1). Key: Leverage sorted order; duplicates are adjacent."
+"Rotate Image (48, Medium): Given an n x n 2D matrix representing an image, rotate the image by 90 degrees clockwise in-place.
+
+Example:
+
+Input:
+
+[[1,2,3],
+
+[4,5,6],
+
+[7,8,9]]
+
+Output:
+
+[[7,4,1],
+
+[8,5,2],
+
+[9,6,3]]
+
+Constraints:
+
+n == matrix.length == matrix[i].length
+
+1 <= n <= 20
+
+-1000 <= matrix[i][j] <= 1000","Brute Force Solution:
+
+1. Create an auxiliary matrix of the same size.
+
+2. For each element at position (i, j) in the original matrix, place it at position (j, n-1-i) in the new matrix.
+
+3. Copy the new matrix back to the original matrix.
+
+Time Complexity: O(n²) due to iterating over all elements.
+
+Optimized Solution:
+
+1. Transpose the matrix by swapping matrix[i][j] with matrix[j][i] for all i < j.
+
+2. Reverse each row of the transposed matrix.
+
+Time Complexity: O(n²) as each element is processed once.
+
+Key Points:
+
+- Transposing converts rows to columns.
+
+- Reversing rows aligns the columns to achieve a 90-degree rotation.
+
+- This approach modifies the matrix in-place, using O(1) extra space.
+
+([medium.com](https://medium.com/%40slicesharpy/leetcode-48-understanding-rotate-image-brute-force-to-optimal-in-place-4153e9317735?utm_source=openai))"
+"Valid Number (65, Hard): Determine if a given string can be interpreted as a valid number. A valid number may include an optional sign, digits, a decimal point, and an optional exponent. Input: '0' → true, ' 0.1 ' → true, 'abc' → false, '1 a' → false, '2e10' → true.","Brute Force: Use a regular expression to match the string against the pattern of a valid number. Time Complexity: O(n). Optimized: Implement a finite state machine to validate the string by checking each character's validity in sequence. Time Complexity: O(n). Key Points: Handle optional signs, ensure proper placement of digits and decimal points, and correctly process the exponent part if present."
+"Set Matrix Zeroes (73, Medium): Given an m x n integer matrix, if an element is 0, set its entire row and column to 0's. You must do it in place. Example: Input: [[1,1,1],[1,0,1],[1,1,1]] Output: [[1,0,1],[0,0,0],[1,0,1]]","Brute Force: Use two arrays to track rows and columns with zeros, then update the matrix accordingly. Time Complexity: O(m * n). Optimized: Use the first row and column as markers to track zeros, and two flags to handle the first row and column separately. Time Complexity: O(m * n). Key Points: Utilize the matrix itself for marking to achieve O(1) space complexity; handle the first row and column separately to avoid overwriting markers."
+"Sort Colors (75, Medium): Given an array `nums` with `n` objects colored red, white, or blue (represented by integers 0, 1, and 2 respectively), sort them in-place so that objects of the same color are adjacent, in the order red, white, and blue. You must solve this problem without using the library's sort function. Example: Input: [2,0,2,1,1,0] Output: [0,0,1,1,2,2]","Brute Force: Count occurrences of 0s, 1s, and 2s; overwrite the array with the counted numbers. Time Complexity: O(n). Optimized: Use the Dutch National Flag algorithm with three pointers (`low`, `mid`, `high`) to partition the array in a single pass. Time Complexity: O(n). Key Points: Maintain three regions in the array for 0s, 1s, and 2s; adjust pointers accordingly to sort in-place without extra space."
+"111. Minimum Depth of Binary Tree (Easy): Given a binary tree, find its minimum depth—the number of nodes along the shortest path from the root node down to the nearest leaf node. A leaf is a node with no children. Example 1: Input: root = [3,9,20,null,null,15,7]. Output: 2. Example 2: Input: root = [2,null,3,null,4,null,5,null,6]. Output: 5.","Brute Force: Traverse all paths from root to leaves, recording depths, and return the minimum depth found. Time Complexity: O(n), where n is the number of nodes. Optimized Solution: Use Breadth-First Search (BFS) to traverse the tree level by level, returning the depth upon encountering the first leaf node. Time Complexity: O(n). Key Points: BFS efficiently finds the minimum depth by stopping at the first leaf node encountered, reducing unnecessary traversal."
+"Strobogrammatic Number II (247, Medium): Given an integer n, return all strobogrammatic numbers of length n. A strobogrammatic number looks the same when rotated 180 degrees. Example: Input: n = 2. Output: [\11\","\""69\"
+"283. Move Zeroes (Easy): Given an integer array nums, move all 0's to the end while maintaining the relative order of non-zero elements. Do this in-place without making a copy of the array. Example: Input: [0,1,0,3,12] Output: [1,3,12,0,0]","Brute Force: Iterate through the array, remove each zero encountered, and append it to the end. Time Complexity: O(n²) due to repeated removals and insertions. Optimized: Use two pointers; one traverses the array, and the other tracks the position to place non-zero elements. Swap non-zero elements to the front and fill the rest with zeros. Time Complexity: O(n). Key Points: Maintain relative order of non-zero elements; perform in-place operations without extra space."
+"328. Odd Even Linked List (Medium): Given the head of a singly linked list, group all nodes with odd indices together followed by nodes with even indices, preserving their relative order. The first node is considered odd, the second node even, and so on. You must solve the problem in O(1) extra space complexity and O(n) time complexity. Example: Input: 1->2->3->4->5->NULL. Output: 1->3->5->2->4->NULL.","Brute Force: Traverse the list to collect values of odd-indexed nodes, then even-indexed nodes, storing them in arrays. Reconstruct the list by reassigning node values from these arrays. Time Complexity: O(n) due to multiple traversals. Optimized: Use two pointers to separate odd and even nodes in a single pass. Initialize 'odd' at head and 'even' at head.next, with 'evenHead' pointing to the first even node. Iterate through the list, adjusting pointers to group odd and even nodes separately, then connect the end of the odd list to the start of the even list. Time Complexity: O(n) with O(1) extra space. Key Points: Maintain two separate chains for odd and even nodes; adjust pointers in a single traversal; connect the end of the odd list to the start of the even list to achieve the desired order."
+"348. Design Tic-Tac-Toe (Medium): Design a Tic-Tac-Toe game that is played between two players on an n x n grid. A move is guaranteed to be valid and is placed on an empty block. Once a winning condition is reached, no more moves are allowed. A player who succeeds in placing n of their marks in a horizontal, vertical, or diagonal row wins the game. Sample Test Cases: TicTacToe toe = new TicTacToe(3); toe.move(0, 0, 1); // Returns 0 (no one wins) toe.move(0, 2, 2); // Returns 0 (no one wins) toe.move(2, 2, 1); // Returns 0 (no one wins) toe.move(1, 1, 2); // Returns 0 (no one wins) toe.move(2, 0, 1); // Returns 0 (no one wins) toe.move(1, 0, 2); // Returns 0 (no one wins) toe.move(2, 1, 1); // Returns 1 (player 1 wins)","Brute Force Solution: Maintain an n x n board matrix. For each move, update the board and check all rows, columns, and diagonals to determine if the current player has won. Time Complexity: O(n) per move. Optimized Solution: Use arrays to track the count of moves for each player in each row, column, and both diagonals. For each move, update the relevant counts and check if any reach n, indicating a win. Time Complexity: O(1) per move. Key Points: - Maintain separate counters for each row, column, and diagonal. - Update only the relevant counters for each move. - Check if any counter reaches n to determine a win. - This approach ensures constant time complexity per move, making it efficient for large boards."
+"Find Pivot Index (724, Easy): Given an array of integers, find the pivot index where the sum of all numbers to the left equals the sum of all numbers to the right. If no such index exists, return -1.
+
+**Example 1:**
+- Input: nums = [1, 7, 3, 6, 5, 6]
+- Output: 3
+- Explanation: The sum of numbers to the left of index 3 is 11 (1 + 7 + 3), and the sum to the right is also 11 (5 + 6).
+
+**Example 2:**
+- Input: nums = [1, 2, 3]
+- Output: -1
+- Explanation: No index satisfies the condition.
+
+**Example 3:**
+- Input: nums = [2, 1, -1]
+- Output: 0
+- Explanation: The sum to the left of index 0 is 0, and the sum to the right is also 0 (1 + (-1)).","**Brute Force Solution:**
+1. Iterate through each index in the array.
+2. For each index, calculate the sum of elements to its left and right.
+3. If the left and right sums are equal, return the current index.
+4. If no such index is found, return -1.
+
+**Time Complexity:** O(n²)
+
+**Optimized Solution:**
+1. Calculate the total sum of the array.
+2. Initialize a variable to keep track of the left sum, starting at 0.
+3. Iterate through the array:
+   - For each element, subtract it from the total sum to get the right sum.
+   - If the left sum equals the right sum, return the current index.
+   - Add the current element to the left sum.
+4. If no such index is found, return -1.
+
+**Time Complexity:** O(n)
+
+**Key Points:**
+- The optimized solution leverages the total sum to avoid recalculating the right sum for each index.
+- By maintaining a running left sum and adjusting the right sum accordingly, the solution achieves linear time complexity.
+- This approach ensures that each element is processed only once, making it efficient for large arrays.
+
+([algo.monster](https://algo.monster/liteproblems/724?utm_source=openai))"
+"Making A Large Island (827, Hard): Given an n x n binary matrix grid where 1 represents land and 0 represents water, you can change at most one 0 to 1. Return the size of the largest island possible after this operation. An island is a 4-directionally connected group of 1's. Examples: Input: [[1,0],[0,1]] Output: 3. Input: [[1,1],[1,0]] Output: 4.","Brute Force: For each 0 in the grid, change it to 1 and perform a DFS or BFS to calculate the size of the resulting island. Time Complexity: O(n^4) due to nested loops and traversal for each cell. Optimized Solution: 1. Assign unique IDs to each island using DFS or BFS and store their sizes. 2. For each 0, check its 4-directional neighbors to identify adjacent islands. 3. Sum the sizes of these unique neighboring islands and add 1 for the flipped cell. 4. Track the maximum island size obtained. Time Complexity: O(n^2) for labeling islands and O(n^2) for evaluating each 0, resulting in O(n^2) overall. Key Points: - Label islands with unique IDs to avoid redundant calculations. - Use a set to track unique neighboring island IDs when evaluating each 0. - Handle edge cases where the grid is entirely land or water."
+"3. Longest Substring Without Repeating Characters (Medium): Given a string s, find the length of the longest substring without repeating characters. Examples: Input: s = 'abcabcbb' Output: 3 Explanation: The answer is 'abc', with the length of 3. Input: s = 'bbbbb' Output: 1 Explanation: The answer is 'b', with the length of 1. Input: s = 'pwwkew' Output: 3 Explanation: The answer is 'wke', with the length of 3. Notice that the answer must be a substring, 'pwke' is a subsequence and not a substring.","Brute Force Solution: 1. Generate all possible substrings of s. 2. For each substring, check if it contains all unique characters. 3. Keep track of the maximum length of such substrings. Time Complexity: O(n³) due to generating O(n²) substrings and checking each for uniqueness in O(n) time. Optimized Solution: 1. Use a sliding window approach with two pointers (left and right) to define the current substring. 2. Utilize a hash set to store characters within the current window. 3. Move the right pointer to expand the window by adding new characters. 4. If a duplicate character is encountered, move the left pointer to the right until the duplicate is removed from the window. 5. Update the maximum length of the substring without repeating characters during the process. Time Complexity: O(n) as each character is processed at most twice. Key Points: - The sliding window technique efficiently finds the longest substring without repeating characters. - Using a hash set allows for quick checks and updates of characters in the current window. - This approach ensures that each character is considered only twice, leading to linear time complexity."
+"4. Median of Two Sorted Arrays (Hard): Given two sorted arrays nums1 and nums2 of size m and n respectively, return the median of the two sorted arrays. The overall run time complexity should be O(log (m+n)). Sample Test Cases: Input: nums1 = [1,3], nums2 = [2]. Output: 2.00000. Explanation: merged array = [1,2,3] and median is 2. Input: nums1 = [1,2], nums2 = [3,4]. Output: 2.50000. Explanation: merged array = [1,2,3,4] and median is (2 + 3) / 2 = 2.5.","Brute Force Solution: Merge both arrays into a single sorted array and find the median. Time Complexity: O((m+n) log (m+n)) due to sorting. Optimized Solution: Use binary search to partition the arrays such that the left partition contains the smaller half and the right partition contains the larger half. Adjust partitions until the maximum of the left partition is less than or equal to the minimum of the right partition. Time Complexity: O(log(min(m, n))). Key Points: - Perform binary search on the smaller array to minimize time complexity. - Ensure the partitions are balanced to correctly find the median. - Handle edge cases where one array is empty or arrays have different lengths."
+"String to Integer (atoi) (8, Medium): Implement the myAtoi(string s) function, which converts a string to a 32-bit signed integer. The function discards leading whitespace, handles an optional sign, and converts subsequent digits into an integer. If the resulting integer is out of the 32-bit signed integer range [-2³¹, 2³¹ - 1], it returns INT_MAX (2³¹ - 1) or INT_MIN (-2³¹). If no valid conversion can be performed, it returns 0. Examples: Input: '42' Output: 42. Input: '   -42' Output: -42. Input: '4193 with words' Output: 4193. Input: 'words and 987' Output: 0. Input: '-91283472332' Output: -2147483648.","Brute Force: Iterate through the string, manually parsing characters to handle whitespace, signs, and digits, constructing the number while checking for overflows. Time Complexity: O(n), where n is the length of the string. Optimized Solution: Similar to the brute force approach, but with careful handling of edge cases and overflow conditions to ensure efficiency. Time Complexity: O(n). Key Points: 1. Trim leading whitespace. 2. Determine the sign from the first non-whitespace character. 3. Convert subsequent digits into an integer, stopping at the first non-digit character. 4. Handle integer overflow by returning INT_MAX or INT_MIN as appropriate. 5. Return 0 if no valid conversion is possible."
+"21. Merge Two Sorted Lists (Easy): Merge two sorted linked lists into one sorted list by splicing together their nodes. Input: list1 = [1,2,4], list2 = [1,3,4]. Output: [1,1,2,3,4,4]","Brute Force: Collect all nodes, sort them, and reconstruct the list. Time Complexity: O((n+m) log(n+m)). Optimized: Use a dummy node and a pointer to iteratively merge the lists by comparing current nodes and attaching the smaller one. Time Complexity: O(n+m). Key Points: Utilize a dummy node to simplify edge cases; compare nodes and attach the smaller one; handle remaining nodes after one list is exhausted."
+"Reverse Nodes in k-Group (25, Hard): Given a linked list, reverse the nodes of the list k at a time and return its modified list. k is a positive integer and is less than or equal to the length of the linked list. If the number of nodes is not a multiple of k, then the remaining nodes should remain as they are. Sample Test Cases: Input: head = [1,2,3,4,5], k = 2; Output: [2,1,4,3,5]. Input: head = [1,2,3,4,5], k = 3; Output: [3,2,1,4,5].","Brute Force Solution: 1. Traverse the linked list to count the total number of nodes. 2. For each group of k nodes, reverse the nodes. 3. If the remaining nodes are fewer than k, leave them as they are. Time Complexity: O(n^2) due to repeated traversal for each group. Optimized Solution: 1. Use a dummy node to simplify edge cases. 2. Initialize pointers: prev_group (points to the dummy node), head (points to the start of the list), and tail (to find the end of each k-group). 3. While there are at least k nodes remaining: a. Move the tail pointer k nodes ahead. b. Reverse the k nodes between head and tail. c. Connect the reversed group back to the list. d. Move prev_group and head pointers to the next group. 4. If fewer than k nodes remain, leave them as they are. Time Complexity: O(n) as each node is visited and manipulated once. Key Points: - Utilize a dummy node to handle edge cases smoothly. - Carefully manage pointers to reverse k nodes and reconnect the list. - Ensure that the remaining nodes are left unchanged if they are fewer than k."
+"28. Find the Index of the First Occurrence in a String (Easy): Given two strings `needle` and `haystack`, return the index of the first occurrence of `needle` in `haystack`, or `-1` if `needle` is not part of `haystack`. Examples: Input: haystack = 'sadbutsad', needle = 'sad'. Output: 0. Input: haystack = 'leetcode', needle = 'leeto'. Output: -1.","Brute Force: Iterate through each position in `haystack` and compare the substring of length equal to `needle` with `needle` itself. Time Complexity: O(n * m), where n is the length of `haystack` and m is the length of `needle`. Optimized Solution: Use the Knuth-Morris-Pratt (KMP) algorithm, which preprocesses `needle` to create an LPS (Longest Prefix Suffix) array, allowing efficient skipping of characters during mismatches. Time Complexity: O(n + m). Key Points: KMP reduces unnecessary comparisons by utilizing the LPS array, making it more efficient for large strings."
+"Trapping Rain Water (42, Hard): Given an array representing an elevation map where the width of each bar is 1, compute how much water can be trapped after raining.
+
+**Example 1:**
+- Input: height = [0,1,0,2,1,0,1,3,2,1,2,1]
+- Output: 6
+- Explanation: The elevation map is represented by the array [0,1,0,2,1,0,1,3,2,1,2,1]. In this case, 6 units of rainwater are trapped.
+
+**Example 2:**
+- Input: height = [4,2,0,3,2,5]
+- Output: 9
+- Explanation: The elevation map is represented by the array [4,2,0,3,2,5]. In this case, 9 units of rainwater are trapped.
+
+**Constraints:**
+- n == height.length
+- 1 <= n <= 2 * 10⁴
+- 0 <= height[i] <= 10⁵","**Brute Force Solution:**
+1. For each index, find the maximum height to its left and right.
+2. Calculate the water trapped at that index as the minimum of these two heights minus the height at the index.
+3. Sum the trapped water for all indices.
+
+**Time Complexity:** O(n²)
+
+**Optimized Solution (Two Pointers):**
+1. Initialize two pointers, left and right, at the start and end of the array, respectively.
+2. Maintain two variables, left_max and right_max, to store the maximum heights encountered from the left and right.
+3. While left is less than right:
+   - If height[left] is less than or equal to height[right]:
+     - If height[left] is greater than or equal to left_max, update left_max.
+     - Else, add the difference between left_max and height[left] to the result.
+     - Move left pointer to the right.
+   - Else:
+     - If height[right] is greater than or equal to right_max, update right_max.
+     - Else, add the difference between right_max and height[right] to the result.
+     - Move right pointer to the left.
+
+**Time Complexity:** O(n)
+
+**Key Points:**
+- The two-pointer approach efficiently calculates trapped water without extra space.
+- Maintains left and right maximum heights dynamically.
+- Works in O(n) time complexity and O(1) space complexity.
+
+([kodeao.com](https://kodeao.com/leetcode-42-trapping-rain-water-two-pointer/?utm_source=openai))"
+"Group Anagrams (49, Medium): Given an array of strings, group the anagrams together. An anagram is a word formed by rearranging the letters of another word, using all original letters exactly once. Example: Input: [\eat\","\""tea\"
+"Jump Game (55, Medium): Given an array of non-negative integers `nums`, where each element represents the maximum jump length at that position, determine if you can reach the last index starting from the first index.
+
+**Example 1:**
+- Input: `nums = [2,3,1,1,4]`
+- Output: `true`
+- Explanation: Jump 1 step from index 0 to 1, then 3 steps to the last index.
+
+**Example 2:**
+- Input: `nums = [3,2,1,0,4]`
+- Output: `false`
+- Explanation: You will always arrive at index 3 no matter what. Its maximum jump length is 0, making it impossible to reach the last index.","**Brute Force Solution:**
+1. Start at index 0.
+2. Recursively attempt all possible jumps from the current index.
+3. If any path leads to the last index, return `true`; otherwise, return `false`.
+
+**Time Complexity:** O(2^n) due to the exploration of all possible jump paths.
+
+**Optimized Solution (Greedy Approach):**
+1. Initialize `maxReach` to 0, representing the farthest index reachable so far.
+2. Iterate through the array:
+   - If the current index `i` is greater than `maxReach`, return `false` (cannot proceed further).
+   - Update `maxReach` to the maximum of its current value and `i + nums[i]`.
+   - If `maxReach` is greater than or equal to the last index, return `true`.
+
+**Time Complexity:** O(n), where n is the length of the array.
+
+**Key Points:**
+- The greedy approach efficiently tracks the farthest reachable index, allowing for an early exit if the end is reachable.
+- If at any point the current index exceeds `maxReach`, it's impossible to reach the last index.
+- This method ensures a linear time solution with constant space usage."
+"Climbing Stairs (70, Easy): You are climbing a staircase with n steps. Each time, you can climb 1 or 2 steps. Determine the number of distinct ways to reach the top. Example: Input: n = 3. Output: 3. Explanation: 1. 1 step + 1 step + 1 step. 2. 1 step + 2 steps. 3. 2 steps + 1 step.","Brute Force: Use recursion to explore all possible step combinations. Time Complexity: O(2^n). Optimized: Recognize the problem as a Fibonacci sequence where f(n) = f(n-1) + f(n-2). Use dynamic programming to iteratively compute the number of ways, storing only the last two results to save space. Time Complexity: O(n). Key Points: The number of ways to reach step n is the sum of ways to reach steps n-1 and n-2. This approach reduces space complexity to O(1) by maintaining only two variables."
+"95. Unique Binary Search Trees II (Medium): Given an integer n, generate all structurally unique BSTs (binary search trees) that store values 1 to n. Example: Input: n = 3. Output: [[1,null,2,null,3],[1,null,3,2],[2,1,3],[3,1,null,null,2],[3,2,null,1]].","Brute Force: Recursively generate all possible BSTs by selecting each number as root and constructing left and right subtrees. Time Complexity: O(3^n). Optimized: Utilize dynamic programming to store and reuse results of subproblems, reducing redundant computations. Time Complexity: O(3^n). Key Points: Use recursion to explore all combinations of left and right subtrees for each root; memoize results to improve efficiency."
+"97. Interleaving String (Medium): Given strings s1, s2, and s3, determine if s3 is formed by interleaving s1 and s2. An interleaving of two strings maintains the relative order of characters from both strings without rearranging them. Sample Test Cases: Input: s1 = 'aabcc', s2 = 'dbbca', s3 = 'aadbbcbcac'. Output: true. Input: s1 = 'aabcc', s2 = 'dbbca', s3 = 'aadbbbaccc'. Output: false.","Brute Force Solution: Recursively explore all possible interleavings of s1 and s2 to check if any match s3. Time Complexity: O(2^(m+n)), where m and n are the lengths of s1 and s2, respectively. Optimized Solution: Use dynamic programming to build a 2D table dp[i][j] indicating if s3[0:i+j] can be formed by interleaving s1[0:i] and s2[0:j]. Initialize dp[0][0] to true, and fill the table based on matches between characters of s1, s2, and s3. Time Complexity: O(m*n). Key Points: 1. Check if the combined length of s1 and s2 equals s3; if not, return false. 2. Use a 2D DP table to track interleaving possibilities. 3. Transition states by checking matches between current characters of s1, s2, and s3. 4. The value at dp[m][n] indicates if s3 can be formed by interleaving s1 and s2."
+"116. Populating Next Right Pointers in Each Node (Medium): Given a perfect binary tree, populate each node's 'next' pointer to point to its next right node. If there is no next right node, the 'next' pointer should be set to NULL. Initially, all 'next' pointers are set to NULL. Example: Input: root = [1,2,3,4,5,6,7]. Output: [1,#,2,3,#,4,5,6,7,#].","Brute Force: Use a queue to perform level-order traversal (BFS). For each level, connect nodes from left to right. Time Complexity: O(n). Optimized: Utilize the 'next' pointers to traverse levels without extra space. For each node, connect its left child to its right child, and if the node has a 'next', connect its right child to the 'next' node's left child. Time Complexity: O(n). Key Points: Leverage the perfect binary tree property; use existing 'next' pointers to traverse levels efficiently; achieve constant extra space by avoiding additional data structures."
+"Word Ladder (127, Hard): Given two words (beginWord and endWord) and a dictionary wordList, find the length of the shortest transformation sequence from beginWord to endWord, such that: 1. Only one letter can be changed at a time. 2. Each transformed word must exist in the word list. Example: Input: beginWord = 'hit', endWord = 'cog', wordList = ['hot','dot','dog','lot','log','cog']. Output: 5. Explanation: The shortest transformation is 'hit' -> 'hot' -> 'dot' -> 'dog' -> 'cog', with a length of 5.","Brute Force: Generate all possible sequences of transformations and check each for validity. Time Complexity: O(N!), where N is the length of the word list. Optimized Solution: Use Bidirectional Breadth-First Search (BFS) to find the shortest path. Steps: 1. Convert wordList to a set for O(1) lookups. 2. Initialize two sets for BFS: one starting from beginWord and the other from endWord. 3. Perform BFS from both ends, expanding the smaller set each time. 4. For each word, generate all possible one-letter transformations. 5. If a transformation exists in the opposite set, the shortest path is found. 6. If no connection is found, return 0. Time Complexity: O(26 * N * L), where N is the number of words in the word list and L is the length of each word. Key Points: - Bidirectional BFS reduces the search space by simultaneously searching from both the start and end words. - Always expand the smaller set to minimize the number of operations. - Use a set to store words for O(1) lookup and to avoid revisiting words."
+"143. Reorder List (Medium): Given the head of a singly linked list, reorder it to: L0 → Ln → L1 → Ln-1 → L2 → Ln-2 → … without modifying node values, only changing pointers. Example: Input: [1,2,3,4,5]. Output: [1,5,2,4,3].","Brute Force: Store nodes in an array, reorder, and rebuild list. Time Complexity: O(n). Optimized: 1) Find middle using slow and fast pointers. 2) Reverse second half. 3) Merge halves alternately. Time Complexity: O(n). Key Points: In-place operations with O(1) space; careful pointer manipulation required."
+"152. Maximum Product Subarray (Medium): Given an integer array nums, find a contiguous subarray within the array (containing at least one number) which has the largest product, and return that product. Example 1: Input: [2,3,-2,4] Output: 6 Explanation: [2,3] has the largest product 6. Example 2: Input: [-2,0,-1] Output: 0 Explanation: The result cannot be 2, because [-2,-1] is not a subarray.","Brute Force Solution: Iterate through all possible subarrays, compute their products, and track the maximum product found. Time Complexity: O(n²) due to nested loops. Optimized Solution: Use dynamic programming to maintain both the maximum and minimum product ending at each index, as a negative number can swap the max and min. Update the global maximum product accordingly. Time Complexity: O(n) with constant space usage. Key Points: Track both maximum and minimum products to handle negative numbers; reset the product when encountering zero to avoid propagation of zeros."
+"Second Highest Salary (176, Medium): Given an Employee table with columns id and salary, write a SQL query to find the second highest distinct salary. If no such salary exists, return null. Example: Input: Employee table: | id | salary | |----|--------| | 1  | 100    | | 2  | 200    | | 3  | 300    | Output: | SecondHighestSalary | |---------------------| | 200                 |","Brute Force: Select all distinct salaries, order them in descending order, and retrieve the second entry. Time Complexity: O(n log n) due to sorting. Optimized: Use a subquery to find the maximum salary, then find the highest salary less than this maximum. Time Complexity: O(n) as it involves two scans of the table. Key Points: Ensure to handle cases where there is no second highest salary by returning null."
+"183. Customers Who Never Order (Easy): Given two tables, `Customers` and `Orders`, write an SQL query to find all customers who have never placed an order. Return the result table in any order. Sample Input: Customers table: | id | name | |----|-------| | 1 | Joe | | 2 | Henry | | 3 | Sam | | 4 | Max | Orders table: | id | customerId | |----|------------| | 1 | 3 | | 2 | 1 | Sample Output: | Customers | |-----------| | Henry | | Max |","Brute Force Solution: 1. For each customer in the `Customers` table, check if their `id` exists in the `Orders` table's `customerId` column. 2. If not, include the customer's name in the result. Time Complexity: O(n * m), where n is the number of customers and m is the number of orders. Optimized Solution: 1. Perform a LEFT JOIN between the `Customers` and `Orders` tables on `Customers.id = Orders.customerId`. 2. Select the `name` from `Customers` where `Orders.id` is NULL. Time Complexity: O(n + m), where n is the number of customers and m is the number of orders. Key Points: - Using a LEFT JOIN allows for efficient identification of customers without orders by checking for NULL values in the joined `Orders` table. - Ensure proper handling of NULL values to avoid incorrect results. - This approach leverages SQL's join capabilities for optimal performance."
+"Reverse Bits (190, Easy): Reverse the bits of a given 32-bit unsigned integer.
+
+**Problem Description:**
+
+Given a 32-bit unsigned integer, reverse its bits and return the resulting integer.
+
+**Sample Test Cases:**
+
+- Input: `00000010100101000001111010011100`
+  Output: `00111001011110000010100101000000`
+  Explanation: The input binary string represents the unsigned integer 43261596, so return 964176192, whose binary representation is `00111001011110000010100101000000`.
+
+- Input: `11111111111111111111111111111101`
+  Output: `10111111111111111111111111111111`
+  Explanation: The input binary string represents the unsigned integer 4294967293, so return 3221225471, whose binary representation is `10111111111111111111111111111111`.","**Brute Force Solution:**
+
+1. Initialize `result` to 0.
+2. Iterate over each of the 32 bits of the input integer:
+   - Left shift `result` by 1 to make room for the next bit.
+   - Extract the least significant bit (LSB) of the input integer using `n & 1`.
+   - Add the extracted bit to `result` using bitwise OR.
+   - Right shift the input integer `n` by 1 to process the next bit.
+3. After processing all bits, `result` contains the reversed bits.
+
+**Time Complexity for Brute Force Solution:**
+
+- O(1): The loop runs exactly 32 times, regardless of the input.
+
+**Optimized Solution:**
+
+1. Swap the left and right 16 bits of the input integer.
+2. Swap 8-bit segments within each 16-bit block.
+3. Swap 4-bit segments within each 8-bit block.
+4. Swap 2-bit segments within each 4-bit block.
+5. Swap individual bits within each 2-bit block.
+
+**Time Complexity for Optimized Solution:**
+
+- O(1): The solution performs a constant number of operations.
+
+**Key Points to Remember for the Optimized Solution:**
+
+- Utilizes bit manipulation techniques to reverse bits in a divide-and-conquer manner.
+- Efficiently reverses bits with a fixed number of operations.
+- Avoids looping through each bit individually, leading to faster execution."
+"Number of Islands (200, Medium): Given an m x n 2D grid of '1's (land) and '0's (water), count the number of islands. An island is formed by connecting adjacent lands horizontally or vertically. Assume all four edges of the grid are surrounded by water. Example: Input: [['1','1','0','0','0'], ['1','1','0','0','0'], ['0','0','1','0','0'], ['0','0','0','1','1']]. Output: 3.","Brute Force: Iterate through each cell; for each '1' found, perform a DFS or BFS to mark all connected lands, counting each as a new island. Time Complexity: O(m * n). Optimized: Same as brute force; no further optimization available. Key Points: Use DFS or BFS to explore connected components; mark visited cells to avoid recounting; ensure to check all four directions (up, down, left, right).}"
+"Contains Duplicate II (219, Easy): Given an integer array nums and an integer k, return true if there are two distinct indices i and j in the array such that nums[i] == nums[j] and abs(i - j) <= k. Sample Test Cases: Input: nums = [1,2,3,1], k = 3; Output: true. Input: nums = [1,0,1,1], k = 1; Output: true. Input: nums = [1,2,3,1,2,3], k = 2; Output: false.","Brute Force Solution: Iterate through all pairs of indices (i, j) and check if nums[i] == nums[j] and abs(i - j) <= k. Time Complexity: O(n²). Optimized Solution: Use a hash table to store the most recent index of each element. As you iterate through nums, for each element, check if it exists in the hash table and if the difference between the current index and the stored index is less than or equal to k. If so, return true; otherwise, update the hash table with the current index. Time Complexity: O(n). Key Points: Utilize a hash table to track the latest index of each element for efficient lookups; This approach ensures a single pass through the array, maintaining an O(n) time complexity."
+"249. Group Shifted Strings (Medium): Given a list of strings, group all strings that belong to the same shifting sequence. A shifting sequence is formed by shifting each letter of a string to its successive letter in the alphabet, wrapping around from 'z' to 'a'. For example, 'abc' can be shifted to 'bcd', 'cde', and so on. Input: ['abc', 'bcd', 'acef', 'xyz', 'az', 'ba', 'a', 'z']. Output: [['abc', 'bcd', 'xyz'], ['az', 'ba'], ['acef'], ['a', 'z']].","Brute Force: Compare each string with every other string to determine if they belong to the same shifting sequence. Time Complexity: O(n² * m), where n is the number of strings and m is the average length of the strings. Optimized Solution: Normalize each string by shifting it back to start from 'a', then use a hash map to group strings with the same normalized form. Time Complexity: O(n * m). Key Points: Normalize strings by shifting them to start from 'a'; Use a hash map to group strings with the same normalized form; Handle wrap-around cases when shifting characters."
+"Closest Binary Search Tree Value (270, Easy): Given the root of a binary search tree and a target value, return the value in the BST that is closest to the target. Example: Input: root = [4,2,5,1,3], target = 3.714286. Output: 4.","Brute Force: Perform an in-order traversal of the BST to collect all node values, then find the value with the smallest absolute difference to the target. Time Complexity: O(n), where n is the number of nodes in the BST. Optimized: Utilize the BST properties to traverse the tree. Start at the root, update the closest value if the current node is closer to the target, and move left or right based on the target's relation to the current node's value. Time Complexity: O(h), where h is the height of the tree (O(log n) for balanced BSTs). Key Points: Leverage the BST's ordered structure to eliminate half of the tree at each step, reducing the number of nodes to examine."
+"286. Walls and Gates (Medium): You are given an m x n grid where:
+- -1 represents a wall or obstacle.
+- 0 represents a gate.
+- INF (2147483647) represents an empty room.
+
+Your task is to fill each empty room with the distance to its nearest gate. If it is impossible to reach a gate, the room should remain INF.
+
+Example:
+Input:
+[
+  [INF, -1,  0,  INF],
+  [INF, INF, INF, -1],
+  [INF, -1, INF, -1],
+  [0,   -1, INF, INF]
+]
+
+Output:
+[
+  [3,  -1,  0,  1],
+  [2,   2,  1, -1],
+  [1,  -1,  2, -1],
+  [0,  -1,  3,  4]
+]","Brute Force Solution:
+1. For each empty room, perform a BFS or DFS to find the nearest gate.
+2. Update the room's value with the distance found.
+3. Repeat for all empty rooms.
+
+Time Complexity: O((m * n)²) in the worst case, as each room may initiate a search through the entire grid.
+
+Optimized Solution:
+1. Initialize a queue and enqueue all gate positions.
+2. Perform a BFS from all gates simultaneously:
+   - Dequeue a position.
+   - For each of its four neighbors (up, down, left, right):
+     - If the neighbor is an empty room (INF), update its value to the current distance + 1 and enqueue it.
+3. Continue until the queue is empty.
+
+Time Complexity: O(m * n), as each cell is processed at most once.
+
+Key Points:
+- Using BFS from all gates ensures that each room is filled with the shortest distance to a gate.
+- This approach efficiently updates all distances in one pass without redundant calculations.
+- The problem is essentially a multi-source shortest path problem on a grid."
+"295. Find Median from Data Stream (Hard): Design a data structure that supports adding integers from a data stream and retrieving the median efficiently. Implement the following methods: `addNum(int num)` to add a number and `findMedian()` to return the median. Sample Test Cases: Input: `addNum(1)`, `addNum(2)`, `findMedian()`, `addNum(3)`, `findMedian()`. Output: `null`, `null`, `1.5`, `null`, `2.0`.",Brute Force Solution: Store all numbers in a list and sort it each time `findMedian()` is called. Time Complexity: `O(n log n)` for sorting. Optimized Solution: Use two heaps: a max-heap for the lower half and a min-heap for the upper half of numbers. Balance the heaps after each insertion to ensure their sizes differ by at most one. Time Complexity: `O(log n)` for `addNum()` and `O(1)` for `findMedian()`. Key Points: Maintain two heaps to efficiently track the median; balance the heaps to ensure the median is always accessible; use a max-heap for the lower half and a min-heap for the upper half to facilitate quick median retrieval.
+"301. Remove Invalid Parentheses (Hard): Given a string containing parentheses and lowercase letters, remove the minimum number of invalid parentheses to make the input string valid. Return all possible valid strings in any order. Input: s = \()())()\"". Output: [\""(())()\","\""()()()\""]."
+"317. Shortest Distance from All Buildings (Hard): Given a 2D grid with values 0 (empty land), 1 (building), and 2 (obstacle), find an empty land cell such that the sum of Manhattan distances from this cell to all buildings is minimized. If no such cell exists, return -1. Sample Test Cases: Input: [[1,0,2,0,1],[0,0,0,0,0],[0,0,1,0,0]] Output: 7","Brute Force Solution: For each empty land cell, perform a BFS or DFS to calculate the distance to every building, then sum these distances. Time Complexity: O((m*n)^2) in the worst case, where m and n are the grid dimensions. Optimized Solution: 1. Initialize two matrices: 'distances' to accumulate the sum of distances from all buildings to each empty cell, and 'reach' to count how many buildings can reach a given empty cell. 2. Count the total number of buildings in the grid. 3. For each building, perform a BFS to update the 'distances' and 'reach' matrices for all reachable empty cells. 4. After processing all buildings, iterate over each empty cell. If an empty cell is reachable from all buildings (i.e., 'reach[i][j]' equals the total number of buildings), consider its cumulative distance. 5. Return the minimum distance found; if no such cell exists, return -1. Time Complexity: O(B * m * n), where B is the number of buildings. Key Points: - Use BFS from each building to efficiently calculate distances to all reachable empty cells. - Maintain 'distances' and 'reach' matrices to aggregate distance sums and track reachability. - Ensure that only empty cells reachable by all buildings are considered for the final result."
+"Coin Change (322, Medium): Given an integer array coins representing different denominations and an integer amount representing a total amount of money, return the fewest number of coins needed to make up that amount. If that amount cannot be made up by any combination of the coins, return -1. You may assume that you have an infinite number of each kind of coin.
+
+Example 1:
+Input: coins = [1, 2, 5], amount = 11
+Output: 3
+Explanation: 11 = 5 + 5 + 1
+
+Example 2:
+Input: coins = [2], amount = 3
+Output: -1
+
+Example 3:
+Input: coins = [1], amount = 0
+Output: 0","Brute Force Solution:
+1. Generate all possible combinations of coins to sum up to the target amount.
+2. Track the number of coins used for each combination.
+3. Return the minimum number of coins among all valid combinations.
+
+Time Complexity: O(n^m), where n is the number of coin denominations and m is the target amount. This is due to the exponential number of combinations.
+
+Optimized Solution (Dynamic Programming):
+1. Initialize a DP array dp of size (amount + 1) with all values set to amount + 1, except dp[0] set to 0.
+2. For each coin in coins:
+   a. For each amount j from coin to amount:
+      i. Update dp[j] as dp[j] = min(dp[j], dp[j - coin] + 1).
+3. If dp[amount] is still amount + 1, return -1; otherwise, return dp[amount].
+
+Time Complexity: O(n * m), where n is the number of coin denominations and m is the target amount. This is due to the nested loops iterating over coins and amounts.
+
+Key Points:
+- Dynamic programming efficiently solves the problem by building up solutions to smaller subproblems.
+- The DP array stores the minimum number of coins needed for each amount up to the target.
+- If the target amount cannot be reached with the given coins, the DP array will indicate this with a value greater than the amount.
+- This approach ensures that each subproblem is solved only once, leading to a more efficient solution compared to brute force methods."
+"Counting Bits (338, Easy): Given an integer n, return an array ans of length n + 1 where ans[i] is the number of 1's in the binary representation of i.
+
+Example 1:
+Input: n = 2
+Output: [0,1,1]
+Explanation:
+0 --> 0 (0 ones)
+1 --> 1 (1 one)
+2 --> 10 (1 one)
+
+Example 2:
+Input: n = 5
+Output: [0,1,1,2,1,2]
+Explanation:
+0 --> 0 (0 ones)
+1 --> 1 (1 one)
+2 --> 10 (1 one)
+3 --> 11 (2 ones)
+4 --> 100 (1 one)
+5 --> 101 (2 ones)","Brute Force Solution:
+1. Initialize an array ans of size n + 1.
+2. For each number i from 0 to n:
+   - Convert i to its binary representation.
+   - Count the number of 1's in this binary string.
+   - Store the count in ans[i].
+3. Return ans.
+
+Time Complexity: O(n log n)
+- Converting a number to binary and counting 1's takes O(log n) time.
+- Repeating this for n numbers results in O(n log n) time complexity.
+
+Optimized Solution:
+1. Initialize an array ans of size n + 1 with all elements set to 0.
+2. For each number i from 1 to n:
+   - Use the relation: ans[i] = ans[i >> 1] + (i & 1).
+     - i >> 1 is equivalent to i divided by 2, effectively shifting bits right.
+     - i & 1 checks if the least significant bit is 1 (i.e., if i is odd).
+   - Store the result in ans[i].
+3. Return ans.
+
+Time Complexity: O(n)
+- Each number from 1 to n is processed in constant time using bit manipulation.
+
+Key Points:
+- Utilize dynamic programming to build upon previously computed results.
+- The relation ans[i] = ans[i >> 1] + (i & 1) efficiently computes the number of 1's by leveraging bit shifts and bitwise operations.
+- This approach avoids redundant calculations and achieves linear time complexity."
+"Non-overlapping Intervals (435, Medium): Given an array of intervals where intervals[i] = [starti, endi], return the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping.
+
+**Sample Test Cases:**
+
+- Input: intervals = [[1,2],[2,3],[3,4],[1,3]]
+  Output: 1
+  Explanation: Removing [1,3] leaves the rest non-overlapping.
+
+- Input: intervals = [[1,2],[1,2],[1,2]]
+  Output: 2
+  Explanation: Removing two [1,2] intervals leaves the rest non-overlapping.
+
+- Input: intervals = [[1,2],[2,3]]
+  Output: 0
+  Explanation: The intervals are already non-overlapping.","**Brute Force Solution:**
+
+1. Generate all possible subsets of intervals.
+2. For each subset, check if it contains only non-overlapping intervals.
+3. Track the size of the largest non-overlapping subset.
+4. The minimum number of intervals to remove is the total number of intervals minus the size of this largest subset.
+
+**Time Complexity:** O(2^n) due to generating all subsets.
+
+**Optimized Solution:**
+
+1. Sort the intervals based on their end times.
+2. Initialize a variable to track the end time of the last added interval.
+3. Iterate through the sorted intervals:
+   - If the current interval's start time is greater than or equal to the end time of the last added interval, add this interval to the non-overlapping set and update the end time.
+   - If it overlaps, increment the count of intervals to remove.
+4. Return the count of intervals to remove.
+
+**Time Complexity:** O(n log n) due to sorting the intervals.
+
+**Key Points:**
+
+- Sorting intervals by end time allows for a greedy approach to select the maximum number of non-overlapping intervals.
+- By always choosing the interval that ends the earliest, we leave the most room for subsequent intervals, minimizing the number of removals.
+- This approach ensures an optimal solution with efficient time complexity.
+
+([algo.monster](https://algo.monster/liteproblems/435?utm_source=openai))"
+"132 Pattern (456, Medium): Given an array of n integers nums, a 132 pattern is a subsequence of three integers nums[i], nums[j], and nums[k] such that i < j < k and nums[i] < nums[k] < nums[j]. Return true if there is a 132 pattern in nums; otherwise, return false. Sample Test Cases: Input: [1,2,3,4] Output: false; Input: [3,1,4,2] Output: true; Input: [-1,3,2,0] Output: true.","Brute Force Solution: Iterate through all possible triplets (i, j, k) to check if they form a 132 pattern. Time Complexity: O(n³). Optimized Solution: Use a stack to track potential '3' values and a variable to track the '2' value. Traverse the array from right to left, updating the '2' value and checking for a valid '1' value. Time Complexity: O(n). Key Points: - Traverse the array from right to left. - Use a stack to maintain potential '3' values. - Keep track of the maximum '2' value found so far. - Check if the current element can serve as the '1' in the 132 pattern."
+"489. Robot Room Cleaner (Hard): Program a robot to clean an entire room using only its movement and cleaning methods. The room is a grid of open and blocked cells, with the robot starting at an unknown position and orientation. The robot's API includes: `move()`, `turnLeft()`, `turnRight()`, and `clean()`. The goal is to clean all accessible cells without revisiting any.
+
+**Sample Test Cases:**
+
+- Input: Room layout unknown; robot starts at an arbitrary position.
+- Output: All accessible cells are cleaned exactly once.","**Brute Force Solution:**
+
+1. Move the robot in random directions.
+2. Clean each cell upon arrival.
+3. Use a set to track visited cells to avoid revisiting.
+4. Continue until no new cells can be reached.
+
+**Time Complexity:** Potentially exponential due to random movement and lack of direction tracking.
+
+**Optimized Solution:**
+
+1. Implement Depth-First Search (DFS) with backtracking:
+   - Start from the initial position, clean the cell, and mark it as visited.
+   - Attempt to move in all four directions (up, right, down, left) systematically.
+   - If a move is successful, recursively perform DFS from the new position.
+   - After exploring a direction, backtrack: turn 180°, move back to the previous cell, and restore the original orientation.
+2. Use a set to keep track of visited positions to prevent redundant cleaning and cycles.
+3. Represent the robot's orientation to manage direction changes effectively.
+
+**Time Complexity:** O(m * n), where m and n are the dimensions of the grid, as each cell is visited and cleaned once.
+
+**Key Points to Remember:**
+
+- DFS with backtracking ensures all accessible cells are cleaned without redundancy.
+- Maintaining a set of visited positions prevents cycles and unnecessary operations.
+- Managing the robot's orientation is crucial for correct movement and backtracking.
+- The robot's API limitations require careful handling of movement and direction changes.
+- The solution must be robust to any room layout and starting position.
+
+([designgurus.io](https://www.designgurus.io/answers/detail/489-robot-room-cleaner-rooocr49?utm_source=openai))"
+"Construct Binary Tree from String (536, Medium): Given a string representing a binary tree with integers and parentheses, construct the corresponding binary tree. Input: '4(2(3)(1))(6(5))'. Output: [4,2,6,3,1,5].","Brute Force: Parse the string to extract node values and structure, recursively build the tree. Time Complexity: O(n). Optimized: Use a stack to manage nodes and parse the string iteratively, handling parentheses to determine child nodes. Time Complexity: O(n). Key Points: Utilize a stack to track nodes, parse integers for node values, and manage parentheses to establish tree structure."
+"545. Boundary of Binary Tree (Medium): Given the root of a binary tree, return the values of its boundary in anti-clockwise direction starting from the root. The boundary includes the left boundary, all the leaf nodes, and the right boundary in order without duplicate nodes.
+
+**Example 1:**
+
+Input: root = [1,null,2,3,4]
+Output: [1,3,4,2]
+Explanation:
+- The left boundary is empty because the root does not have a left child.
+- The right boundary follows the path starting from the root's right child 2 -> 4.
+- The leaves from left to right are [3,4].
+Concatenating everything results in [1] + [] + [3,4] + [2] = [1,3,4,2].
+
+**Example 2:**
+
+Input: root = [1,2,3,4,5,6,null,null,null,7,8,9,10]
+Output: [1,2,4,7,8,9,10,6,3]
+Explanation:
+- The left boundary follows the path starting from the root's left child 2 -> 4.
+- The right boundary follows the path starting from the root's right child 3 -> 6 -> 10.
+- The leaves from left to right are [4,7,8,9,10].
+Concatenating everything results in [1] + [2] + [4,7,8,9,10] + [6,3] = [1,2,4,7,8,9,10,6,3].","Brute Force Approach:
+
+1. Perform a level-order traversal to collect all nodes.
+2. Identify and extract the left boundary, leaf nodes, and right boundary from the collected nodes.
+3. Concatenate these lists to form the boundary.
+
+**Time Complexity:** O(n²) due to the need to traverse the tree and then process the list to extract boundaries.
+
+**Optimized Approach:**
+
+1. **Left Boundary:** Traverse from the root's left child down to the left-most node, adding nodes to the boundary list, excluding leaf nodes.
+2. **Leaf Nodes:** Perform an in-order traversal to collect all leaf nodes.
+3. **Right Boundary:** Traverse from the root's right child down to the right-most node, adding nodes to a temporary list, excluding leaf nodes. Reverse this list before adding it to the boundary list.
+4. **Combine:** Concatenate the root, left boundary, leaf nodes, and reversed right boundary to form the final boundary list.
+
+**Time Complexity:** O(n) as each node is visited once.
+
+**Key Points:**
+
+- Ensure that leaf nodes are not duplicated in the boundary list.
+- Handle edge cases where the tree has only a root node or lacks left/right subtrees.
+- The right boundary should be added in reverse order to maintain the anti-clockwise direction.
+
+([jiakaobo.com](https://www.jiakaobo.com/leetcode/545.%20Boundary%20of%20Binary%20Tree.html?utm_source=openai))"
+"636. Exclusive Time of Functions (Medium): Given n functions running on a single-threaded CPU and a list of logs representing their start and end times, calculate the exclusive time spent in each function. Each log is formatted as '[function_id]:[start|end]:[timestamp]'. The exclusive time is the total time a function spends executing, excluding time spent in nested function calls.
+
+Example:
+
+Input: n = 2, logs = ['0:start:0', '1:start:2', '1:end:5', '0:end:6']
+
+Output: [3, 4]
+
+Explanation:
+
+- Function 0 starts at time 0 and runs for 2 units until time 1.
+
+- Function 1 starts at time 2, runs for 4 units until time 5.
+
+- Function 0 resumes at time 6 and runs for 1 unit until time 6.
+
+Total exclusive times: Function 0: 2 + 1 = 3, Function 1: 4.","Brute Force Approach:
+
+1. Parse each log to extract function ID, type (start/end), and timestamp.
+
+2. Simulate the execution by iterating through each log and maintaining a record of active functions and their start times.
+
+3. For each 'start' log, note the function's start time.
+
+4. For each 'end' log, calculate the time elapsed since the corresponding 'start' and add it to the function's exclusive time.
+
+5. Adjust the exclusive times of parent functions to exclude the time spent in nested calls.
+
+Time Complexity: O(n²)
+
+Optimized Approach:
+
+1. Initialize an array to store the exclusive times for each function.
+
+2. Use a stack to keep track of the function call hierarchy.
+
+3. Iterate through each log:
+
+   - For a 'start' log:
+
+     - If the stack is not empty, update the exclusive time of the function at the top of the stack by adding the time elapsed since the last timestamp.
+
+     - Push the current function ID onto the stack.
+
+     - Update the previous timestamp to the current timestamp.
+
+   - For an 'end' log:
+
+     - Pop the function ID from the stack.
+
+     - Calculate the time elapsed since the last timestamp, add 1 (to include the current timestamp), and add it to the exclusive time of the function.
+
+     - Update the previous timestamp to the current timestamp plus one.
+
+4. Return the array of exclusive times.
+
+Time Complexity: O(n)
+
+Key Points:
+
+- Utilize a stack to manage function call hierarchy and track active functions.
+
+- Update exclusive times by calculating the difference between consecutive timestamps.
+
+- Ensure to account for the inclusive nature of 'end' timestamps by adding one to the calculated duration.
+
+- Maintain a previous timestamp variable to accurately compute time intervals between logs.
+
+- This approach efficiently handles nested and sequential function calls on a single-threaded CPU."
+"686. Repeated String Match (Medium): Given two strings a and b, return the minimum number of times you should repeat string a so that string b is a substring of it. If it is impossible for b to be a substring of a after repeating it, return -1. Notice: string 'abc' repeated 0 times is '', repeated 1 time is 'abc' and repeated 2 times is 'abcabc'. Example 1: Input: a = 'abcd', b = 'cdabcdab' Output: 3 Explanation: We return 3 because by repeating a three times 'abcdabcdabcd', b is a substring of it. Example 2: Input: a = 'a', b = 'aa' Output: 2","Brute Force: Repeat string a incrementally and check if b is a substring each time. Time Complexity: O((n + m) * m), where n = len(a) and m = len(b). Optimized Solution: 1. Calculate the minimum repetitions needed: ceil(len(b) / len(a)). 2. Repeat a this number of times and check if b is a substring. 3. If not, repeat a one more time and check again. 4. If b is still not a substring, return -1. Time Complexity: O(n + m). Key Points: - The minimum repetitions required is ceil(len(b) / len(a)). - Check up to one additional repetition to account for overlaps. - If b is not found after these checks, it's impossible for b to be a substring of repeated a."
+"Insert into a Sorted Circular Linked List (708, Medium): Given a circular linked list sorted in non-descending order, insert a value such that the list remains sorted. If the list is empty, create a new single circular list with the given value. Return the reference to the inserted node. Examples: Input: head = [3,4,1], insertVal = 2. Output: [3,4,1,2]. Input: head = [], insertVal = 1. Output: [1].","Brute Force: Traverse the list to find the correct insertion point by comparing each node's value with insertVal. Insert the new node at the identified position. Time Complexity: O(n), where n is the number of nodes in the list. Optimized Solution: 1. If the list is empty, create a new node pointing to itself and return it. 2. Traverse the list to find the insertion point: a. If insertVal fits between two nodes, insert it there. b. If at the end of the list and insertVal is either greater than the maximum or less than the minimum, insert it at the end. 3. If no suitable position is found after a full traversal, insert the new node at any point. Time Complexity: O(n). Key Points: - Handle edge cases like an empty list or all nodes having the same value. - Ensure the circular nature of the list is maintained after insertion. - The solution should work efficiently for large lists up to 50,000 nodes."
+"735. Asteroid Collision (Medium): Given an array of integers representing asteroids in a row, where the absolute value represents the size and the sign represents the direction (positive for right, negative for left). Each asteroid moves at the same speed. Determine the state of the asteroids after all collisions. If two asteroids meet, the smaller one explodes; if both are the same size, both explode. Asteroids moving in the same direction never meet. Examples: Input: [5,10,-5] Output: [5,10] Explanation: 10 and -5 collide resulting in 10. 5 and 10 never collide. Input: [8,-8] Output: [] Explanation: 8 and -8 collide, both explode. Input: [10,2,-5] Output: [10] Explanation: 2 and -5 collide resulting in -5. 10 and -5 collide resulting in 10.","Brute Force: Compare each asteroid with every other asteroid to check for collisions, updating the list accordingly. Time Complexity: O(n²). Optimized Solution: Use a stack to simulate the collisions: 1. Initialize an empty stack. 2. Iterate through each asteroid: - If the asteroid is moving right (positive), push it onto the stack. - If the asteroid is moving left (negative): - While the stack is not empty and the top of the stack is a right-moving asteroid: - If the top asteroid is smaller, pop it from the stack. - If the top asteroid is equal in size, pop it from the stack and do not push the current asteroid. - If the top asteroid is larger, do not push the current asteroid. - If no collision occurs, push the current asteroid onto the stack. 3. The stack now contains the surviving asteroids. Time Complexity: O(n). Key Points: - Utilize a stack to efficiently manage collisions. - Only right-moving asteroids can collide with left-moving ones. - Handle consecutive collisions by continuing to check the top of the stack."
+"Peak Index in a Mountain Array (852, Medium): Given an integer array 'arr' that increases to a peak and then decreases, find the index of the peak element.
+
+**Example 1:**
+- Input: arr = [0,1,0]
+- Output: 1
+
+**Example 2:**
+- Input: arr = [0,2,1,0]
+- Output: 1
+
+**Example 3:**
+- Input: arr = [0,10,5,2]
+- Output: 1","Brute Force Solution:
+1. Iterate through the array from the second element to the second-to-last element.
+2. For each element, check if it's greater than both its previous and next elements.
+3. If such an element is found, return its index.
+
+Time Complexity: O(n)
+
+Optimized Solution:
+1. Initialize two pointers, 'left' at the start and 'right' at the end of the array.
+2. While 'left' is less than 'right':
+   - Calculate 'mid' as the average of 'left' and 'right'.
+   - If 'arr[mid]' is less than 'arr[mid + 1]', move 'left' to 'mid + 1'.
+   - Otherwise, move 'right' to 'mid'.
+3. When 'left' equals 'right', return 'left' as the peak index.
+
+Time Complexity: O(log n)
+
+**Key Points:**
+- The array's structure allows for a binary search approach, reducing time complexity.
+- By comparing 'arr[mid]' with 'arr[mid + 1]', we determine the direction towards the peak.
+- This method efficiently narrows down the search space by half in each iteration.
+
+([designgurus.io](https://www.designgurus.io/answers/detail/852-peak-index-in-a-mountain-array-arr2?utm_source=openai))"
+"875. Koko Eating Bananas (Medium): Koko has `n` piles of bananas, with the `i-th` pile containing `piles[i]` bananas. She has `h` hours to eat all the bananas before the guards return. Each hour, Koko can eat up to `k` bananas from a single pile. If a pile has fewer than `k` bananas, she eats all of them and doesn't eat more that hour. Determine the minimum integer `k` such that Koko can eat all the bananas within `h` hours. Example: Input: `piles = [3,6,7,11]`, `h = 8`. Output: `4`.","Brute Force: Try all possible eating speeds from 1 to the size of the largest pile. For each speed, calculate the total hours needed by summing up the ceiling of `pile / k` for each pile. If the total hours are less than or equal to `h`, return that speed. Time Complexity: O(n * m), where `n` is the number of piles and `m` is the size of the largest pile. Optimized: Use binary search on the possible eating speeds between 1 and the maximum pile size. For each mid-point speed, calculate the total hours needed. If it's less than or equal to `h`, adjust the search range to find a smaller valid speed; otherwise, increase the speed. Time Complexity: O(n * log m). Key Points: The problem exhibits a monotonic relationship between eating speed and time taken, making binary search an efficient approach. Ensure to use ceiling division when calculating hours needed for each pile."
+"Shortest Bridge (934, Medium): Given an n x n binary matrix grid where 1 represents land and 0 represents water, and exactly two islands exist, find the minimum number of 0's to flip to connect the two islands. Example: Input: grid = [[0,1],[1,0]] Output: 1",Brute Force: Check all possible 0's to flip and see if islands connect. Time Complexity: O((n^2)^2). Optimized: 1. Use DFS to mark one island. 2. Use BFS from the marked island to find the shortest path to the other island. Time Complexity: O(n^2). Key Points: - Use DFS to identify and mark one island. - Use BFS to expand from the marked island to find the shortest bridge.
+"994. Rotting Oranges (Medium): Given an m x n grid where each cell can be 0 (empty), 1 (fresh orange), or 2 (rotten orange). Every minute, any fresh orange adjacent to a rotten one becomes rotten. Return the minimum number of minutes until no cell has a fresh orange. If impossible, return -1. Example: Input: grid = [[2,1,1],[1,1,0],[0,1,1]] Output: 4","Brute Force: Simulate each minute, checking all cells for fresh oranges adjacent to rotten ones, and update the grid accordingly. Repeat until no fresh oranges remain or no changes occur. Time Complexity: O((m*n)^2) due to repeated scanning of the grid. Optimized: Use Breadth-First Search (BFS) starting from all initially rotten oranges, spreading the rot level by level, and counting minutes until all fresh oranges are rotten. Time Complexity: O(m*n) as each cell is processed once. Key Points: Utilize multi-source BFS to handle simultaneous spread from multiple rotten oranges; track the number of fresh oranges to determine when all are rotten; if fresh oranges remain unrotted after BFS, return -1."
+"1047. Remove All Adjacent Duplicates In String (Easy): Given a string s consisting of lowercase English letters, remove all adjacent duplicate characters recursively until no adjacent duplicates remain. Return the final string. Example: Input: 'abbaca' Output: 'ca' Explanation: Remove 'bb' to get 'aaca', then remove 'aa' to get 'ca'.","Brute Force: Iterate through the string, removing adjacent duplicates and restarting the process until no duplicates remain. Time Complexity: O(n^2). Optimized: Use a stack to process characters; push non-duplicates and pop when duplicates are found. Time Complexity: O(n). Key Points: Utilize a stack to efficiently manage and remove adjacent duplicates in a single pass."
+"Car Pooling (1094, Medium): Given a car with a certain capacity and a list of trips, each defined by the number of passengers, start location, and end location, determine if it's possible to pick up and drop off all passengers without exceeding the car's capacity at any point. Example: Input: trips = [[2,1,5],[3,3,7]], capacity = 4. Output: false.","Brute Force: Simulate the journey, tracking passenger count at each kilometer. Time Complexity: O(n * m), where n is the number of trips and m is the maximum distance. Optimized: Use a difference array to record changes in passenger count at each location, then compute the running total to check against capacity. Time Complexity: O(n + m). Key Points: Utilize a difference array to efficiently track passenger changes; ensure the running total never exceeds capacity."
+"1148. Article Views I (Easy): Given a 'Views' table with columns 'article_id', 'author_id', 'viewer_id', and 'view_date', find all authors who have viewed at least one of their own articles. Return the result sorted by 'id' in ascending order. Sample Input: Views table: | article_id | author_id | viewer_id | view_date | |------------|-----------|-----------|------------| | 1 | 3 | 5 | 2019-08-01 | | 1 | 3 | 6 | 2019-08-02 | | 2 | 7 | 7 | 2019-08-01 | | 2 | 7 | 6 | 2019-08-02 | | 4 | 7 | 1 | 2019-07-22 | | 3 | 4 | 4 | 2019-07-21 | | 3 | 4 | 4 | 2019-07-21 | Sample Output: | id | |----| | 4 | | 7 |","Brute Force: Scan the 'Views' table to identify rows where 'author_id' equals 'viewer_id', collect unique 'author_id's, and sort them. Time Complexity: O(n log n) due to sorting. Optimized Solution: Use a SQL query: SELECT DISTINCT author_id AS id FROM Views WHERE author_id = viewer_id ORDER BY id; Time Complexity: O(n log n) due to sorting. Key Points: - Use DISTINCT to eliminate duplicates. - Filter rows where 'author_id' equals 'viewer_id'. - Sort results by 'id' in ascending order."
+"1287. Element Appearing More Than 25% In Sorted Array (Easy): Given a sorted integer array, find the element that appears more than 25% of the time. Input: [1,2,2,6,6,6,6,7,10]. Output: 6.","Brute Force: Iterate through the array, count occurrences of each element using a hash map, and return the element with a count exceeding 25% of the array's length. Time Complexity: O(n). Optimized: Utilize the sorted nature of the array. For each element at index i, check if it is the same as the element at index i + n/4. If they are the same, return the element. Time Complexity: O(n). Key Points: Leverage the sorted property to reduce the number of checks; if an element appears more than 25% of the time, it will occupy a contiguous block of sufficient length."
+"Maximum Number of Events That Can Be Attended (1353, Medium): Given an array of events where each event is represented as [startDay, endDay], determine the maximum number of events you can attend, attending only one event per day.
+
+Example:
+
+Input: events = [[1,2],[2,3],[3,4]]
+
+Output: 3
+
+Explanation: Attend the first event on day 1, the second event on day 2, and the third event on day 3.","Brute Force:
+
+1. For each event, iterate through its available days to find an unoccupied day.
+
+2. Mark the day as occupied and count the event as attended.
+
+Time Complexity: O(n * d), where n is the number of events and d is the range of days.
+
+Optimized Solution:
+
+1. Sort events by their start day.
+
+2. Use a min-heap to track events by their end day.
+
+3. For each day:
+
+   - Add events starting that day to the heap.
+
+   - Remove events from the heap that have already ended.
+
+   - Attend the event with the earliest end day.
+
+Time Complexity: O(n log n), due to sorting and heap operations.
+
+Key Points:
+
+- Sorting events by start day allows sequential processing.
+
+- A min-heap efficiently tracks the soonest ending events.
+
+- Attending events that end earliest maximizes the number of events attended."
+"Find Lucky Integer in an Array (1394, Easy): Given an array of integers, a lucky integer is one that appears in the array a number of times equal to its value. Return the largest lucky integer in the array; if none exist, return -1.
+
+Example 1: Input: [2,2,3,4]. Output: 2. Explanation: The only lucky number is 2 because it appears twice.
+
+Example 2: Input: [1,2,2,3,3,3]. Output: 3. Explanation: 1, 2, and 3 are all lucky numbers; the largest is 3.
+
+Example 3: Input: [2,2,2,3,3]. Output: -1. Explanation: There are no lucky numbers in the array.","Brute Force: For each unique number in the array, count its occurrences and check if the count equals the number itself. Time Complexity: O(n²).
+
+Optimized: Use a hash map to count occurrences of each number, then find the largest number where the count equals the number. Time Complexity: O(n).
+
+Key Points: Utilize a hash map for efficient frequency counting; iterate through the map to identify the largest lucky integer."
+"1679. Max Number of K-Sum Pairs (Medium): Given an integer array nums and an integer k, return the maximum number of operations where you can pick two numbers from the array whose sum equals k and remove them. Input: nums = [1,2,3,4], k = 5. Output: 2. Explanation: Remove pairs (1,4) and (2,3).","Brute Force: Iterate through all pairs to check if their sum equals k. Time Complexity: O(n²). Optimized: Sort the array and use two pointers; one at the start and one at the end. If the sum of the two pointers equals k, move both pointers inward. If the sum is less than k, move the left pointer right; if greater, move the right pointer left. Time Complexity: O(n log n) due to sorting. Key Points: Sorting enables efficient pair finding; two-pointer technique reduces the need for nested loops."
+"1868. Product of Two Run-Length Encoded Arrays (Medium): Given two run-length encoded arrays, compute their element-wise product and return the result in run-length encoded format. Example: Input: encoded1 = [[1,3],[2,3]], encoded2 = [[6,3],[3,3]]. Output: [[6,6]].","Brute Force: Expand both encoded arrays to full arrays, compute element-wise product, then re-encode the result. Time Complexity: O(n + m), where n and m are the lengths of the expanded arrays. Optimized: Use two pointers to traverse both encoded arrays without full expansion, compute products for overlapping segments, and merge consecutive segments with the same product. Time Complexity: O(p + q), where p and q are the lengths of encoded1 and encoded2. Key Points: Avoid full expansion to save space; merge consecutive segments with the same product to minimize the result's length."
+"Find Subsequence of Length K With the Largest Sum (2099, Easy): Given an integer array nums and an integer k, find a subsequence of nums of length k that has the largest sum. Return any such subsequence as an integer array of length k. A subsequence is an array that can be derived from another array by deleting some or no elements without changing the order of the remaining elements. Sample Test Cases: Input: nums = [2,1,3,3], k = 2; Output: [3,3]. Input: nums = [-1,-2,3,4], k = 3; Output: [-1,3,4]. Input: nums = [3,4,3,3], k = 2; Output: [3,4].","Brute Force Solution: Generate all possible subsequences of length k, calculate their sums, and return the one with the largest sum. Time Complexity: O(n choose k), which is exponential and impractical for large n. Optimized Solution: 1. Pair each element in nums with its index. 2. Sort these pairs based on the element values in descending order. 3. Select the first k pairs. 4. Sort these k pairs based on their original indices to maintain the order. 5. Extract the elements from these pairs to form the result subsequence. Time Complexity: O(n log n) due to sorting operations. Key Points: - Sorting helps in efficiently selecting the k largest elements. - Maintaining original indices ensures the subsequence order is preserved. - This approach balances efficiency and correctness by leveraging sorting and indexing."
+"Count Number of Trapezoids II (3625, Hard): Given a set of 2D points, count the number of trapezoids that can be formed where exactly one pair of opposite sides are parallel. Input: points = [[0,0],[1,1],[2,2],[3,3],[4,4]]. Output: 0.","Brute Force: Iterate over all point quadruples, check for trapezoid conditions. Time Complexity: O(n⁴). Optimized: 1. Calculate lines defined by each point pair. 2. Group lines by slope; count pairs with the same slope but different intercepts. 3. Subtract parallelograms counted twice by identifying pairs with the same midpoint. Time Complexity: O(n²). Key Points: 1. Use slope-intercept form to group lines. 2. Avoid double-counting parallelograms by checking midpoints. 3. Efficiently manage line and midpoint data using hashmaps."

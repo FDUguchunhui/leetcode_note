@@ -1,0 +1,7 @@
+- front: 680. Valid Palindrome II [Easy]
+  back: |
+    **Logic**: Two-pointer approach...
+    **Code**:
+    ```python
+    def validPalindrome(s): ...
+    ```
